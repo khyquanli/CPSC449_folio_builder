@@ -5,6 +5,7 @@ A multi-tenant portfolio builder for students. Create a site, write Blogs (your 
 
 
 Features
+
 Sites: one per user (more if you want), themed via templates.
 
 Blogs: hackathons, project updates, retros (markdown + tags + event type).
