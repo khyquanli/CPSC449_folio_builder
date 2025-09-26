@@ -1,0 +1,151 @@
+/* === GLOBAL STYLES === */
+body {
+    margin: 0;
+    font-family: "Gill Sans", sans-serif;
+}
+
+/* === NAVBAR CONTAINER === */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 0.75rem 2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* === LEFT SECTION (Logo + Name) === */
+.nav-left {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    /* font-weight: bold; */
+    font-size: 1.2rem;
+    color: #000000;
+}
+
+.nav-left img {
+    height: 24px;
+    margin-right: 8px;
+}
+
+/* === CENTER SECTION (Dropdowns) === */
+.nav-center {
+    display: flex;
+    gap: 2rem;
+}
+
+/* Dropdown container */
+.dropdown {
+    position: relative;
+}
+
+/* Dropdown button (Products, About Us) */
+.dropdown button {
+    background: none;
+    /* Remove default button look */
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #333;
+    /* Default text */
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+    /* Smooth hover effect */
+}
+
+/* Hover effect on dropdown text */
+.dropdown:hover button {
+    color: #0099ff;
+    /* Light blue on hover */
+}
+
+/* Google Material Icons - Arrow */
+/* https://fonts.google.com/icons?categoryFilters=Feeling:%2FExpressive%2FBusiness;Sans+Serif:%2FSans%2F*&selected=Material+Symbols+Outlined:keyboard_arrow_down:FILL@0;wght@400;GRAD@0;opsz@24&icon.query=dropdown&icon.size=24&icon.color=%23e3e3e3&icon.platform=web */
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    transition: transform 0.3s ease;
+}
+
+/* Flip arrow on hover */
+.dropdown:hover .material-symbols-outlined {
+    transition: transform 0.2s ease;
+    transform: scaleY(-1);
+}
+
+/* Dropdown content box */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    /* Place just under button */
+    left: 0;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    min-width: max-content;
+    /* Fit dropdown to content */
+    z-index: 1000;
+}
+
+/* Show menu when hovering */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Dropdown links */
+.dropdown-content a {
+    display: block;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hover effect for dropdown items */
+.dropdown-content a:hover {
+    background: #f0f8ff;
+    color: #0077cc;
+}
+
+/* === RIGHT SECTION (Buttons) === */
+.nav-right {
+    display: flex;
+    gap: 1rem;
+}
+
+/* General button style */
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Log In button */
+.btn-login {
+    background: transparent;
+    color: #333;
+}
+
+.btn-login:hover {
+    color: #0077cc;
+}
+
+/* Get Started button */
+.btn-start {
+    background: #0077cc;
+    color: white;
+    padding: 0.75rem 0.75rem;
+}
+
+.btn-start:hover {
+    background: #005fa3;
+}
