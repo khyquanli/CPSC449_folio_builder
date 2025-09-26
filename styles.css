@@ -101,7 +101,7 @@ nav {
 /* Dropdown links */
 .dropdown-content a {
     display: block;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.5rem;
     text-decoration: none;
     color: #333;
     transition: background-color 0.2s ease, color 0.2s ease;
