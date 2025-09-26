@@ -149,3 +149,60 @@ nav {
 .btn-start:hover {
     background: #005fa3;
 }
+
+/* === TEAM PAGE === */
+.team-container {
+    padding: 2rem;
+    font-family: "Gill Sans", sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.team-container h1 {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #0077cc;
+}
+
+/* Team member card */
+.team-member {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    padding: 3rem;
+    border-radius: 8px;
+    background: #f9f9f9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    /* hidden initially */
+    transform: translateY(50px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Show when scrolled into view */
+.team-member.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.member-info {
+    flex: 2;
+}
+
+.member-info h2 {
+    margin: 0;
+    color: #333;
+}
+
+.member-photo {
+    flex: 1;
+    text-align: center;
+}
+
+.member-photo img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
