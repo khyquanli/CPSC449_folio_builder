@@ -40,7 +40,7 @@ nav {
     position: relative;
 }
 
-/* Dropdown button (Products, About Us) */
+/* Dropdowns for Explore and Who We Are */
 .dropdown button {
     background: none;
     /* Remove default button look */
@@ -156,6 +156,7 @@ nav {
     font-family: "Gill Sans", sans-serif;
     max-width: 1000px;
     margin: 0 auto;
+    line-height: 1.5;
 }
 
 .team-container h1 {
