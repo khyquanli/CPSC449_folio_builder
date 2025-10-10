@@ -45,8 +45,9 @@ app.post("/login", (req, res) => {
     const user = results[0];
 
     if (password == user.password) {
-      res.send("Login successful! 🎉");
+      // res.send("Login successful! 🎉");
       console.log(`Login successful for: ${username}`);
+      res.redirect("/index.html"); // Redirect to main page on success
     } else {
       res.send("Invalid password.");
       console.log(`Login failed: Incorrect password for ${username}`);
