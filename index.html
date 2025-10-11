@@ -1,30 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Builder</title>
-    <link rel="icon" type="image/jpeg" href="assets/placeholder-icon.jpg">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio Builder</title>
 
-    <!-- Google Material Icons for dropdown arrows -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=keyboard_arrow_down" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/placeholder-icon.jpg" />
 
+  <!-- Site CSS (cache-busted) -->
+  <link rel="stylesheet" href="styles.css?v=4" />
+
+  <!-- Google Material Icons (for navbar arrows) -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=keyboard_arrow_down" />
 </head>
 
 <body>
-    <div id="navbar"></div>
+  <!-- Navbar gets injected here from navbar.html -->
+  <div id="navbar"></div>
 
-    <!-- Page-specific content -->
-    <main style="padding: 2rem; font-family: 'Gill Sans', sans-serif;">
-        <h1>Welcome!</h1>
-        <p>Portfolio builder helps you easily create and manage your personal portfolio. Add projects, showcase your
-            skills, and customize your profile to share with others.</p>
-    </main>
+  <!-- HOMEPAGE CONTENT -->
+  <main class="home">
 
-    <script src="script.js"></script>
+    <!-- Primary hero -->
+    <section class="hero hero--primary">
+      <div class="container">
+        <h1>Folio builder</h1>
+        <p class="subtext">Build the portfolio of your dreams in minutes</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="/register">Get started</a>
+          <a class="btn btn-ghost" href="/login">Sign in</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Founders -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Our founders</h2>
+
+        <div class="card-grid">
+          <article class="card person">
+            <img src="assets/kevin-headshot.jpg" alt="Kevin Quan" class="avatar" />
+            <h3 class="person-name">Kevin Quan</h3>
+            <p class="muted">Quick and concise description...</p>
+          </article>
+
+          <article class="card person">
+            <img src="assets/christine-headshot.png" alt="Christine Sulio" class="avatar" />
+            <h3 class="person-name">Christine Sulio</h3>
+            <p class="muted">Quick and concise description...</p>
+          </article>
+
+          <article class="card person">
+            <!-- NOTE: .jpeg extension for Jerry -->
+            <img src="assets/jerry-headshot.jpeg" alt="Jerry Requena" class="avatar" />
+            <h3 class="person-name">Jerry Requena</h3>
+            <p class="muted">Quick and concise description...</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Secondary hero -->
+    <section class="hero hero--alt">
+      <div class="container">
+        <h2>Get hired faster with one link</h2>
+        <p class="subtext">A clean, recruiter-ready portfolio in minutes — not weeks.</p>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+<section id="pricing" class="home pricing">
+  <div class="container">
+    <div class="pb-toggle">
+      <button class="pb-toggle-btn is-active" data-cycle="monthly">Monthly</button>
+      <button class="pb-toggle-btn" data-cycle="yearly">Yearly</button>
+      <a class="pb-toggle-link" href="/pricing">Link</a>
+    </div>
+
+    <div class="pb-price-grid">
+      <!-- Basic -->
+      <article class="pb-card">
+        <h3 class="pb-plan">Basic</h3>
+        <div class="pb-price">
+          <span class="pb-currency">$</span><span class="pb-amount" data-monthly="0" data-yearly="0">0</span><span class="pb-suffix">/mo</span>
+        </div>
+        <ul class="pb-features">
+          <li>3 Free templates</li>
+          <li>Public share link</li>
+          <li>Access anywhere, anytime</li>
+        </ul>
+        <a class="btn btn-primary pb-cta" href="/register">Start Free</a>
+      </article>
+
+      <!-- Premium -->
+      <article class="pb-card pb-card--dark">
+        <h3 class="pb-plan">Premium</h3>
+        <div class="pb-price">
+          <span class="pb-currency">$</span><span class="pb-amount" data-monthly="50" data-yearly="40">50</span><span class="pb-suffix">/mo</span>
+        </div>
+        <ul class="pb-features pb-features--light">
+          <li>All templates + future releases</li>
+          <li>Unlimited personal portfolios</li>
+          <li>Gen-AI recommendations</li>
+          <li>Custom sections &amp; CSS</li>
+          <li>Data analytics</li>
+        </ul>
+        <a class="btn pb-cta" href="/register">Try Premium</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+    <!-- FAQ -->
+    <section id="faq" class="home faq">
+    <div class="container">
+        <h2 class="section-title">FAQ</h2>
+
+        <div class="pb-accordion">
+        <details open>
+            <summary>What do I get on the free plan?</summary>
+            <div class="pb-acc-body">One portfolio, 3 recruiter-ready templates, public link, basic hosting.</div>
+        </details>
+
+        <details>
+            <summary>What’s in Premium?</summary>
+            <div class="pb-acc-body">Unlimited portfolios, all templates, analytics, AI writing helper, custom CSS, priority support.</div>
+        </details>
+
+        <details>
+            <summary>Can I switch templates later?</summary>
+            <div class="pb-acc-body">Yes—content stays; only the layout changes.</div>
+        </details>
+
+        <details>
+            <summary>Do I need to code?</summary>
+            <div class="pb-acc-body">No. It’s a visual editor. You can add custom CSS if you want.</div>
+        </details>
+
+        <details>
+            <summary>Can I use my own domain?</summary>
+            <div class="pb-acc-body">Premium supports custom domains (e.g., yourname.dev). Free uses a shareable subdomain.</div>
+        </details>
+        </div>
+    </div>
+    </section>
+
+
+  </main>
+
+  <!-- site JS -->
+  <script src="script.js"></script>
+
+  <!-- Inject navbar.html into #navbar -->
+  <script>
+    fetch('navbar.html')
+      .then(r => r.text())
+      .then(html => { document.getElementById('navbar').innerHTML = html; })
+      .catch(() => { console.warn('navbar.html failed to load'); });
+  </script>
 </body>
-
 </html>
