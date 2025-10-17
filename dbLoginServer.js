@@ -1,5 +1,6 @@
 const mysql = require("mysql2");
 const express = require("express");
+const bcrypt = require("bcrypt");
 const path = require("path");
 
 const app = express();
@@ -31,27 +32,32 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-  console.log(username, password);
+  const { username, input_password } = req.body;
+  console.log(username, input_password);
 
-  db.query("SELECT * FROM users WHERE username = ?", [username], (err, results) => {
+  db.query("SELECT * FROM users WHERE username = ?", [username], (err, result) => {
     if (err) throw err;
 
-    if (results.length === 0) {
+    if (result.length === 0) {
       console.log(`Login attempt failed: "${username}" not found`);
-      return res.send("User not found.");
+      return res.send("User not found. Please try again.");
     }
 
-    const user = results[0];
+    const user = result[0]; // store instance of user from database
 
-    if (password == user.password) {
-      // res.send("Login successful! 🎉");
-      console.log(`Login successful for: ${username}`);
-      res.redirect("/index.html"); // Redirect to main page on success
-    } else {
-      res.send("Invalid password.");
-      console.log(`Login failed: Incorrect password for ${username}`);
-    }
+    bcrypt.compare(input_password, user.password, (err, isMatch) => {
+      if (err) {
+        console.error(err);
+        // return res.send("An error occurred during authentication.");
+      }
+      if (isMatch) {
+        console.log(`Login successful for: ${username}`);
+        res.redirect("/index.html"); // Redirect to main page on success
+      } else {
+        console.log(`Login failed: Incorrect password for ${username}`);
+        res.send("Invalid password. Please try again.");
+      }
+    });
   });
 });
 
@@ -62,19 +68,44 @@ app.get("/register", (req, res) => {
 
 app.post("/register", (req, res) => {
   console.log(req.body)
-  const { username, password } = req.body;
+  const { username, email, input_password } = req.body;
 
-  db.query("SELECT * FROM users WHERE username = ?", [username], (err, results) => {
+  // Check if email already associated with existing account
+  db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
     if (err) throw err;
-
-    if (results.length > 0) {
-      return res.send("Username already exists!");
+    if (result.length > 0) {
+      console.log(`Email ${email} already associated with an account.`);
+      return res.send("Email already exists.");
     }
-
-    db.query("INSERT INTO users (username, password) VALUES (?, ?)", [username, password], (err, results) => {
+    // Check if username is already taken
+    db.query("SELECT * FROM users WHERE username = ?", [username], (err, result) => {
       if (err) throw err;
-      console.log(`New user registered: ${username}`);
-      res.send("Registration successful! You can now log in.");
+
+      if (result.length > 0) {
+        console.log(`Username ${username} already taken.`);
+        return res.send("Username already taken.");
+      }
+
+      if (req.body.input_password !== req.body.confirm_password) {
+        console.log("Passwords do not match. Account not created.");
+        return res.send("Passwords do not match. Please try again.");
+      }
+
+      // Hash password before storing
+      const saltRounds = 10;
+      bcrypt.hash(input_password, saltRounds, (err, hashed_password) => {
+        if (err) {
+          console.error(err);
+        }
+
+        // Insert new user into database if both available
+        db.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashed_password], (err, result) => {
+          if (err) throw err;
+          console.log(`New user registered: ${username}`);
+          // res.send("Registration successful! You can now log in.");
+          res.redirect("/login.html"); // Redirect to sign-in page after successful registration
+        });
+      });
     });
   });
 });
