@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard • Folio Builder</title>
+
+  <link rel="stylesheet" href="styles.css?v=dash-shell1" />
+
+  <!-- Material Symbols (icons) -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&display=swap" />
+</head>
+<body class="dash-body">
+  <!-- Navbar (same include pattern) -->
+  <div id="navbar"></div>
+
+  <!-- App shell -->
+  <div class="app-shell">
+
+    <!-- Drawer / Left closet -->
+    <aside id="drawer" class="drawer is-open" aria-label="Main navigation">
+      <div class="drawer-header">
+        <button id="drawerToggle" class="icon-btn" aria-label="Toggle menu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <span class="brand">Folio builder</span>
+      </div>
+
+      <nav class="drawer-nav">
+        <!-- Use data-section as routing keys later -->
+        <a class="nav-item is-active" data-section="home">
+          <span class="material-symbols-outlined">home</span>
+          <span class="label">Home</span>
+        </a>
+
+        <div class="nav-group">Portfolio</div>
+        <a class="nav-item" data-section="portfolios">
+          <span class="material-symbols-outlined">workspaces</span>
+          <span class="label">My Portfolios</span>
+        </a>
+        <a class="nav-item" data-section="create">
+          <span class="material-symbols-outlined">add_circle</span>
+          <span class="label">Create Portfolio</span>
+        </a>
+        <a class="nav-item" data-section="templates">
+          <span class="material-symbols-outlined">style</span>
+          <span class="label">Templates</span>
+        </a>
+
+        <div class="nav-group">Content</div>
+        <a class="nav-item" data-section="resume">
+          <span class="material-symbols-outlined">description</span>
+          <span class="label">Resume</span>
+        </a>
+        <a class="nav-item" data-section="blogs">
+          <span class="material-symbols-outlined">article</span>
+          <span class="label">Blogs</span>
+        </a>
+        <a class="nav-item" data-section="posts">
+          <span class="material-symbols-outlined">link</span>
+          <span class="label">External Mentions</span>
+        </a>
+
+        <div class="nav-group">Insights</div>
+        <a class="nav-item" data-section="analytics">
+          <span class="material-symbols-outlined">query_stats</span>
+          <span class="label">Analytics</span>
+          <span class="badge badge-premium">Premium</span>
+        </a>
+
+        <div class="nav-group">Account</div>
+        <a class="nav-item" data-section="settings">
+          <span class="material-symbols-outlined">settings</span>
+          <span class="label">Settings</span>
+        </a>
+        <a class="nav-item" data-section="billing">
+          <span class="material-symbols-outlined">credit_card</span>
+          <span class="label">Billing</span>
+        </a>
+        <a class="nav-item" data-section="help">
+          <span class="material-symbols-outlined">help</span>
+          <span class="label">Help</span>
+        </a>
+        <a class="nav-item" data-section="logout">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="label">Log out</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main content area (empty shell placeholders) -->
+    <main id="content" class="app-content">
+      <header class="content-bar">
+        <h1 id="sectionTitle">Home</h1>
+        <div class="right-actions">
+          <a href="/pricing" class="btn btn-ghost">Upgrade</a>
+          <a href="/create" class="btn btn-primary">Create Portfolio</a>
+        </div>
+      </header>
+
+      <!-- Placeholder panels for now -->
+      <section class="grid">
+        <article class="panel">
+          <h3>Welcome</h3>
+          <p class="muted">This is your dashboard. Pick an item from the left to get started.</p>
+        </article>
+
+        <article class="panel">
+          <h3>Quick actions</h3>
+          <div class="actions-row">
+            <button class="btn">Edit Profile</button>
+            <button class="btn">Upload Resume</button>
+            <button class="btn">Manage Templates</button>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h3>Status</h3>
+          <ul class="bullets">
+            <li>Plan: <strong>Basic</strong></li>
+            <li>Portfolios: 0 / 1</li>
+            <li>Analytics: <span class="badge badge-premium">Premium</span></li>
+          </ul>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Inject navbar
+    fetch('navbar.html').then(r=>r.text()).then(h=>document.getElementById('navbar').innerHTML=h);
+
+    // Drawer toggle
+    const drawer = document.getElementById('drawer');
+    document.getElementById('drawerToggle').addEventListener('click', ()=>{
+      drawer.classList.toggle('is-open');
+    });
+
+    // Simple client-side section switch (empty shells)
+    const content = document.getElementById('content');
+    const title = document.getElementById('sectionTitle');
+    const menuItems = document.querySelectorAll('.drawer .nav-item');
+
+    const shells = {
+      home: `
+        <section class="grid">
+          <article class="panel"><h3>Welcome</h3><p class="muted">Home overview goes here.</p></article>
+          <article class="panel"><h3>Quick actions</h3><div class="actions-row"><button class="btn">Edit Profile</button><button class="btn">Upload Resume</button><button class="btn">Manage Templates</button></div></article>
+          <article class="panel"><h3>Status</h3><ul class="bullets"><li>Plan: <strong>Basic</strong></li><li>Portfolios: 0 / 1</li><li>Analytics: <span class="badge badge-premium">Premium</span></li></ul></article>
+        </section>
+      `,
+      portfolios: `
+        <section class="grid">
+          <article class="panel"><h3>My Portfolios</h3><p class="muted">List of portfolios will appear here.</p></article>
+          <article class="panel"><h3>Tips</h3><p class="muted">Use a clean template, keep text scannable.</p></article>
+        </section>
+      `,
+      create: `
+        <section class="grid">
+          <article class="panel">
+            <h3>Create Portfolio</h3>
+            <p class="muted">Choose a template and give it a title.</p>
+            <div class="form-row"><label>Title</label><input class="input" placeholder="e.g., Software Engineer Portfolio" /></div>
+            <div class="template-strip">
+              <div class="template-card">Template A</div>
+              <div class="template-card">Template B</div>
+              <div class="template-card">Template C</div>
+            </div>
+            <div class="actions-row"><button class="btn btn-primary">Continue</button></div>
+          </article>
+        </section>
+      `,
+      templates: `
+        <section class="grid"><article class="panel"><h3>Templates</h3><p class="muted">Template gallery placeholder.</p></article></section>
+      `,
+      resume: `
+        <section class="grid"><article class="panel"><h3>Resume</h3><p class="muted">Upload or replace resume (placeholder).</p></article></section>
+      `,
+      blogs: `
+        <section class="grid"><article class="panel"><h3>Blogs</h3><p class="muted">Write about hackathons and projects (placeholder).</p></article></section>
+      `,
+      posts: `
+        <section class="grid"><article class="panel"><h3>External Mentions</h3><p class="muted">Link articles/tweets where you’re mentioned (placeholder).</p></article></section>
+      `,
+      analytics: `
+        <section class="grid"><article class="panel"><h3>Analytics</h3><p class="muted">Views, visits, downloads (Premium). Placeholder only.</p></article></section>
+      `,
+      settings: `
+        <section class="grid"><article class="panel"><h3>Settings</h3><p class="muted">Account & profile settings shell.</p></article></section>
+      `,
+      billing: `
+        <section class="grid"><article class="panel"><h3>Billing</h3><p class="muted">Plan & payment management (placeholder).</p></article></section>
+      `,
+      help: `
+        <section class="grid"><article class="panel"><h3>Help</h3><p class="muted">FAQ and support (placeholder).</p></article></section>
+      `,
+      logout: `
+        <section class="grid"><article class="panel"><h3>Log out</h3><p class="muted">This would end session (placeholder).</p></article></section>
+      `
+    };
+
+    function render(section) {
+      title.textContent = section.charAt(0).toUpperCase() + section.slice(1);
+      content.querySelector('.grid')?.remove();
+      content.insertAdjacentHTML('beforeend', shells[section] || shells.home);
+    }
+
+    menuItems.forEach(item=>{
+      item.addEventListener('click', ()=>{
+        menuItems.forEach(i=>i.classList.remove('is-active'));
+        item.classList.add('is-active');
+        render(item.dataset.section);
+      });
+    });
+
+    // Initial
+    render('home');
+  </script>
+</body>
+</html>
