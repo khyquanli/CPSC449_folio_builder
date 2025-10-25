@@ -149,7 +149,6 @@ nav {
 
 .login-container h1 {
     text-align: center;
-    /* margin-bottom: 3rem; */
     color: #000000;
 }
 
@@ -212,6 +211,28 @@ nav {
   .wix2-sidebar.is-open{ transform: translateX(0); }
   .wix2-main{ margin-left:16px; }               
 }
+
+.sidebar .item.is-active {
+  background:#eef3ff; border:1px solid #dbe6ff; border-radius:10px;
+}
+
+/* Left-nav mini panels */
+.panel[hidden]{ display:none; }
+.panel{
+  position: fixed;         
+  min-width: 260px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 10px;
+  z-index: 1000;
+}
+.panel-header{ font-weight:700; margin:6px 6px 8px; }
+.panel-link{
+  display:block; padding:8px 10px; border-radius:10px; color:#2b2f37; text-decoration:none;
+}
+.panel-link:hover{ background:#f5f7ff; }
 
 /* Top-right icon buttons */
 .topbar .top-actions { display:flex; gap:12px; align-items:center; }
