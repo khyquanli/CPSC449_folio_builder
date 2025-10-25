@@ -123,6 +123,47 @@
       border:1px solid var(--border); background:#fff; font-weight:600; }
     .chip.primary { background:var(--brand); color:#fff; border-color:var(--brand); }
 
+    /* === Left sidebar pop menus === */
+.side-pop {
+  position: fixed;
+  left: 252px;                 
+  min-width: 280px;
+  max-width: 340px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 10px;
+  z-index: 30;
+  display: none;             
+}
+.sidebar.is-collapsed + .side-pop,
+.sidebar.is-collapsed ~ .side-pop { left: 72px; }
+
+.side-pop .title {
+  font-size: .9rem;
+  font-weight: 700;
+  margin: 6px 6px 8px;
+  color: var(--ink);
+}
+.side-pop .item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px; border-radius: 10px; cursor: pointer;
+}
+.side-pop .item:hover { background: #f5f7ff; }
+.side-pop .item .icon {
+  font-family: "Material Symbols Outlined"; font-size: 20px;
+}
+.side-pop .sep { border-top: 1px solid var(--border); margin: 8px 6px; }
+
+.side-pop::before{
+  content:"";
+  position:absolute; top:12px; left:-6px;
+  width: 12px; height: 12px; rotate: 45deg;
+  background:#fff; border-left:1px solid var(--border); border-top:1px solid var(--border);
+}
+
+
     /* ===============  Responsive  =============== */
     @media (max-width: 980px){
       .sidebar { transform: translateX(-100%); transition: transform .2s ease; width: 272px; }
@@ -173,10 +214,17 @@
   </div>
 
   <div class="group-label">Workspace</div>
-  <a class="item" href="#setup"><span class="icon">tune</span><span class="text">Setup</span></a>
-  <a class="item" href="#portfolio"><span class="icon">work</span><span class="text">Portfolio</span></a>
-  <a class="item" href="#applications"><span class="icon">assignment_turned_in</span><span class="text">Job Applications</span></a>
-  <a class="item" href="#analytics"><span class="icon">insights</span><span class="text">Analytics</span></a>
+  <a class="item" href="#setup"         data-pop="pop-setup"><span class="icon">tune</span><span class="text">Setup</span></a>
+<!-- Sidebar items (examples) -->
+<a class="item" href="#portfolio" data-panel="portfolioPanel">
+  <span class="icon">work</span><span class="text">Portfolio</span>
+</a>
+<a class="item" href="#applications" data-panel="applicationsPanel">
+  <span class="icon">assignment_turned_in</span><span class="text">Job Applications</span>
+</a>
+<a class="item" href="#analytics" data-panel="analyticsPanel">
+  <span class="icon">insights</span><span class="text">Analytics</span>
+</a>
 
   <div class="nav-sep"></div>
 
@@ -188,11 +236,34 @@
   <div style="height:8px"></div>
 </aside>
 
+<!-- Panels (place these once, outside the sidebar but inside the same page) -->
+<div id="portfolioPanel" class="panel" hidden>
+  <div class="panel-header">Portfolio</div>
+  <a class="panel-link" href="#portfolio-overview">Overview</a>
+  <a class="panel-link" href="#portfolio-templates">Templates</a>
+  <a class="panel-link" href="#portfolio-resumes">Resumes</a>
+</div>
+
+<div id="applicationsPanel" class="panel" hidden>
+  <div class="panel-header">Job Applications</div>
+  <a class="panel-link" href="#apps-tracker">Tracker</a>
+  <a class="panel-link" href="#apps-resumes">Resumes</a>
+  <a class="panel-link" href="#apps-calendar">Calendar</a>
+</div>
+
+<div id="analyticsPanel" class="panel" hidden>
+  <div class="panel-header">Analytics</div>
+  <a class="panel-link" href="#analytics-overview">Overview</a>
+  <a class="panel-link" href="#analytics-traffic">Traffic</a>
+  <a class="panel-link" href="#analytics-conversions">Conversions</a>
+</div>
+
+
     <!-- Main -->
     <main class="main" id="main">
       <section class="card pad">
         <h1 class="title">Welcome to your Dashboard</h1>
-        <p class="muted">Let’s set up your business</p>
+        <p class="muted">Let’s set up your Portfolio</p>
         <div class="sp"></div>
 
         <div class="checklist-head">
@@ -226,9 +297,10 @@
 
     // ----- Checklist model -----
     const steps = [
-      { id:'site-type', label:'Update your site type', btn:'', icon:'check_circle' },
       { id:'domain', label:'Connect a custom domain', cta:'Let’s Go' },
+      { id:'site-type', label:'Choose a template', btn:'', cta:'See Presets',icon:'check_circle' },
       { id:'project', label:'Add a project to your portfolio', cta:'Add Project' },
+      { id:'design', label:'Upload your resume', cta:'Upload Resume' },
       { id:'design', label:'Design your website', cta:'Design Site' },
     ];
 
@@ -279,5 +351,6 @@
 
     render();
   </script>
+  <script src="script.js"></script>
 </body>
 </html>
