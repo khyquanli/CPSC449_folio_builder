@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 const db = mysql.createConnection({
   host: "localhost",
   user: "myuser",
-  password: "mypassword123",
+  password: "mypassword",
   database: "mydb"
 });
 
@@ -78,6 +78,14 @@ app.post("/register", (req, res) => {
     db.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username,email,hashedPassword], (err) => {
       if (err) {
         console.error(err);
+        if (err.code === 'ER_DUP_ENTRY') {
+          if (err.message.includes('username')) {
+            return res.status(400).send("Username already taken");
+          }
+          if (err.message.includes('email')) {
+            return res.status(400).send("Email already registered");
+          }
+        }
         return res.status(500).send("Database error");
       }
 
