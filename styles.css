@@ -235,7 +235,7 @@ nav {
 .panel-link:hover{ background:#f5f7ff; }
 
 /* Top-right icon buttons */
-.topbar .top-actions { display:flex; gap:12px; align-items:center; }
+.topbar .top-actions { display:flex; gap:12px; align-items:center; cursor:pointer; }
 
 .topbar .icon-btn{
   all: unset !important;                 
@@ -264,4 +264,81 @@ nav {
   border-radius:999px; background:#ef4444; color:#fff;
   font-size:11px; line-height:18px; font-weight:700; text-align:center;
   border:2px solid #fff;
+}
+
+/* === Enhanced Topbar Icons === */
+.topbar .icon-btn .icon {
+  font-size: 26px; /* previously 22px */
+  color: #1f2937;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.topbar .icon-btn:hover .icon {
+  transform: scale(1.15);
+  color: #0077cc;
+}
+
+/* === Profile Dropdown Menu === */
+.profile-dropdown {
+  position: absolute;
+  top: 60px;
+  right: 12px;
+  width: 230px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  padding: 12px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 1000;
+}
+
+.profile-dropdown.show {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.profile-info {
+  text-align: left;
+  margin-bottom: 4px;
+}
+.profile-info .username {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #111827;
+}
+.profile-info .email {
+  font-size: 0.83rem;
+  color: #6b7280;
+}
+
+.profile-dropdown hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 8px 0;
+}
+
+.dropdown-btn {
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: 0.9rem;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.dropdown-btn:hover {
+  background-color: #f5f7ff;
+}
+.dropdown-btn.logout {
+  color: #ef4444;
+}
+.dropdown-btn.logout:hover {
+  background-color: #fee2e2;
 }

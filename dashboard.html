@@ -192,20 +192,30 @@
       <input placeholder="Search for tools, apps, help & more…" />
     </label>
     <div class="top-actions">
-  <button class="icon-btn" aria-label="Inbox" data-menu="inboxMenu">
-    <span class="icon">inbox</span>
-    <span class="badge" id="inboxBadge">3</span>
-  </button>
+      <button class="icon-btn" aria-label="Inbox" data-menu="inboxMenu">
+        <span class="icon">inbox</span>
+        <span class="badge" id="inboxBadge">3</span>
+      </button>
 
-  <button class="icon-btn" aria-label="Notifications" data-menu="notifMenu">
-    <span class="icon">notifications</span>
-    <span class="badge" id="notifBadge">2</span>
-  </button>
+      <button class="icon-btn" aria-label="Notifications" data-menu="notifMenu">
+        <span class="icon">notifications</span>
+        <span class="badge" id="notifBadge">2</span>
+      </button>
 
-  <button class="icon-btn" aria-label="Account" data-menu="acctMenu">
-    <span class="icon">account_circle</span>
-  </button>
-</div>
+      <button class="icon-btn" aria-label="Account" data-menu="acctMenu" id="profileIconBtn">
+        <span class="icon">account_circle</span>
+      </button>
+
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="profile-info">
+          <div class="username" id="dropdownUsername"><b>Username</b></div>
+          <div class="email" id="dropdownEmail">Email</div>
+        </div>
+        <hr>
+        <button class="dropdown-btn" id="accountSettingsBtn">Account Settings</button>
+        <button class="dropdown-btn logout" id="logoutBtn">Log Out</button>
+      </div>
+    </div>
   </header>
 
   <div class="shell">
@@ -353,6 +363,24 @@
     });
 
     render();
+
+    // Profile dropdown toggle
+    const profileBtn = document.getElementById("profileIconBtn");
+    const profileDropdown = document.getElementById("profileDropdown");
+
+    if (profileBtn && profileDropdown) {
+      profileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle("show");
+      });
+
+      // Close dropdown if clicked outside
+      document.addEventListener("click", (e) => {
+        if (!profileDropdown.contains(e.target) && e.target !== profileBtn) {
+          profileDropdown.classList.remove("show");
+        }
+      });
+    }
   </script>
   <script src="script.js"></script>
 </body>
