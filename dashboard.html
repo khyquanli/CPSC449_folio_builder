@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dashboard • Folio Builder</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/placeholder-icon.jpg" />
 
   <!-- Material Symbols (icons) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -178,7 +180,8 @@
   <header class="topbar">
     <button class="btn menu-btn" id="sidebarToggle"><span class="icon">menu</span>menu</button>
     <div class="brand">
-      <div class="logo">FB</div>
+       <a href="index.html" class="nav-left">
+    <img src="assets/placeholder-icon.jpg" alt="Portfolio Logo" class="logo-img">
       <span>Folio Builder</span>
       <span class="muted">|</span>
       <a class="muted" href="#">My Site</a>
@@ -189,20 +192,30 @@
       <input placeholder="Search for tools, apps, help & more…" />
     </label>
     <div class="top-actions">
-  <button class="icon-btn" aria-label="Inbox" data-menu="inboxMenu">
-    <span class="icon">inbox</span>
-    <span class="badge" id="inboxBadge">3</span>
-  </button>
+      <button class="icon-btn" aria-label="Inbox" data-menu="inboxMenu">
+        <span class="icon">inbox</span>
+        <span class="badge" id="inboxBadge">3</span>
+      </button>
 
-  <button class="icon-btn" aria-label="Notifications" data-menu="notifMenu">
-    <span class="icon">notifications</span>
-    <span class="badge" id="notifBadge">2</span>
-  </button>
+      <button class="icon-btn" aria-label="Notifications" data-menu="notifMenu">
+        <span class="icon">notifications</span>
+        <span class="badge" id="notifBadge">2</span>
+      </button>
 
-  <button class="icon-btn" aria-label="Account" data-menu="acctMenu">
-    <span class="icon">account_circle</span>
-  </button>
-</div>
+      <button class="icon-btn" aria-label="Account" data-menu="acctMenu" id="profileIconBtn">
+        <span class="icon">account_circle</span>
+      </button>
+
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="profile-info">
+          <div class="username" id="dropdownUsername"><b>Username</b></div>
+          <div class="email" id="dropdownEmail">Email</div>
+        </div>
+        <hr>
+        <button class="dropdown-btn" id="accountSettingsBtn">Account Settings</button>
+        <button class="dropdown-btn logout" id="logoutBtn">Log Out</button>
+      </div>
+    </div>
   </header>
 
   <div class="shell">
@@ -350,6 +363,58 @@
     });
 
     render();
+
+    // Profile dropdown toggle
+    const profileBtn = document.getElementById("profileIconBtn");
+    const profileDropdown = document.getElementById("profileDropdown");
+
+    if (profileBtn && profileDropdown) {
+      profileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle("show");
+      });
+
+      // Close dropdown if clicked outside
+      document.addEventListener("click", (e) => {
+        if (!profileDropdown.contains(e.target) && e.target !== profileBtn) {
+          profileDropdown.classList.remove("show");
+        }
+      });
+    }
+
+    // Run this once the page loads
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch("/getUserInfo")
+        .then(response => response.json())
+        .then(data => {
+          if (data.loggedIn) {
+            // Display user info on the dashboard profile dropdown
+            document.getElementById("dropdownUsername").textContent = data.username;
+            document.getElementById("dropdownEmail").textContent = data.email;
+          } else {
+            // If not logged in, redirect to login page
+            window.location.href = "/login.html";
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching user info:", err);
+        });
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      try {
+        const response = await fetch("/logout", { method: "POST" });
+        if (response.ok) {
+          // Redirect to home page after logout
+          window.location.href = "/";
+        } else {
+          alert("Error logging out. Please try again.");
+        }
+      } catch (error) {
+        console.error("Logout error:", error);
+      }
+    });
+
   </script>
   <script src="script.js"></script>
 </body>
