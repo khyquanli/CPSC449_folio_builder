@@ -49,6 +49,10 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "login.html"));
 });
 
+app.get("/register", (req, res) => {
+  res.sendFile(path.join(__dirname, "userRegister.html"));
+});
+
 app.post("/login", (req, res) => {
   const { username, input_password } = req.body;
 
@@ -114,6 +118,7 @@ app.post("/register", (req, res) => {
       }
 
       console.log("User registered:", username);
+      res.redirect("/login")
     });
   });
 });
@@ -139,6 +144,7 @@ app.post("/logout", (req, res) => {
     }
     console.log("Logout successful")
     res.clearCookie("user_session");
+    res.redirect("/"); // Redirect to login page after logout
   });
 });
 
