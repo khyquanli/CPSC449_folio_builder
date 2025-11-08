@@ -381,6 +381,40 @@
         }
       });
     }
+
+    // Run this once the page loads
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch("/getUserInfo")
+        .then(response => response.json())
+        .then(data => {
+          if (data.loggedIn) {
+            // Display user info on the dashboard profile dropdown
+            document.getElementById("dropdownUsername").textContent = data.username;
+            document.getElementById("dropdownEmail").textContent = data.email;
+          } else {
+            // If not logged in, redirect to login page
+            window.location.href = "/login.html";
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching user info:", err);
+        });
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      try {
+        const response = await fetch("/logout", { method: "POST" });
+        if (response.ok) {
+          // Redirect to home page after logout
+          window.location.href = "/";
+        } else {
+          alert("Error logging out. Please try again.");
+        }
+      } catch (error) {
+        console.error("Logout error:", error);
+      }
+    });
+
   </script>
   <script src="script.js"></script>
 </body>

@@ -235,7 +235,7 @@ nav {
 .panel-link:hover{ background:#f5f7ff; }
 
 /* Top-right icon buttons */
-.topbar .top-actions { display:flex; gap:12px; align-items:center; cursor:pointer; }
+.topbar .top-actions { display:flex; gap:12px; align-items:center;  }
 
 .topbar .icon-btn{
   all: unset !important;                 
@@ -274,7 +274,8 @@ nav {
 }
 .topbar .icon-btn:hover .icon {
   transform: scale(1.15);
-  color: #0077cc;
+  color: #0077cc;  
+  cursor: pointer;
 }
 
 /* === Profile Dropdown Menu === */
