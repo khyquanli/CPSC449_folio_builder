@@ -281,7 +281,7 @@
 
         <div class="checklist-head">
           <div class="row muted">
-            <span id="countLabel">0/6 completed</span>
+            <span id="countLabel">0/5 completed</span>
           </div>
           <div class="progress">
             <div class="meter"><i id="meterBar" style="width:0%"></i></div>
@@ -311,26 +311,31 @@
     // ----- Checklist model -----
     const steps = [
       { id:'domain', label:'Connect a custom domain', cta:'Let’s Go' },
-      { id:'site-type', label:'Choose a template', btn:'', cta:'See Presets',icon:'check_circle' },
+      { id:'template', label:'Choose a template', btn:'', cta:'See Presets',icon:'check_circle' },
       { id:'project', label:'Add a project to your portfolio', cta:'Add Project' },
-      { id:'design', label:'Upload your resume', cta:'Upload Resume' },
+      { id:'resume', label:'Upload your resume', cta:'Upload Resume' },
       { id:'design', label:'Design your website', cta:'Design Site' },
     ];
 
+    // Holds the user's checklist booleans received from server
+    let userChecklist = {
+      domain: false,
+      template: false,
+      project: false,
+      resume: false,
+      design: false
+    };
+
     const tasksEl   = document.getElementById('tasks');
     const meterBar  = document.getElementById('meterBar');
-    const countLbl  = document.getElementById('countLabel');
+    const countLbl  = document.getElementById('countLabel');   
 
-    // Persisted completion in localStorage
-    const KEY = 'fb_checklist';
-    const state = JSON.parse(localStorage.getItem(KEY) || '{}');
-
-    function render(){
+    function renderChecklist(){
       tasksEl.innerHTML = '';
       let complete = 0;
 
       steps.forEach(step => {
-        const checked = !!state[step.id];
+        const checked = !!userChecklist[step.id];
         if (checked) complete++;
 
         const row = document.createElement('div');
@@ -354,15 +359,24 @@
     }
 
     tasksEl.addEventListener('change', (e) => {
-      if (e.target.matches('input[type="checkbox"]')){
-        const id = e.target.getAttribute('data-id');
-        state[id] = e.target.checked;
-        localStorage.setItem(KEY, JSON.stringify(state));
-        render();
-      }
+      if (!e.target.matches('input[type="checkbox"]')) return;
+      const id = e.target.getAttribute('data-id');
+      userChecklist[id] = e.target.checked == true;
+      renderChecklist();
+      saveChecklist(); 
     });
 
-    render();
+    renderChecklist();
+
+    function loadChecklist() {
+      fetch("/getChecklist")
+        .then(res => res.json())
+        .then(data => {
+          userChecklist = data;
+          render();
+        })
+        .catch(err => console.error("Checklist load error:", err));
+    }
 
     // Profile dropdown toggle
     const profileBtn = document.getElementById("profileIconBtn");
@@ -381,25 +395,54 @@
         }
       });
     }
+    
+    async function init() {
+      try {
+        const userInfo = await fetch("/getUserInfo");
+        const userData = await userInfo.json();
 
-    // Run this once the page loads
-    document.addEventListener("DOMContentLoaded", () => {
-      fetch("/getUserInfo")
-        .then(response => response.json())
-        .then(data => {
-          if (data.loggedIn) {
-            // Display user info on the dashboard profile dropdown
-            document.getElementById("dropdownUsername").textContent = data.username;
-            document.getElementById("dropdownEmail").textContent = data.email;
-          } else {
+        if (!userData.loggedIn) {
             // If not logged in, redirect to login page
             window.location.href = "/login.html";
-          }
-        })
-        .catch(err => {
-          console.error("Error fetching user info:", err);
-        });
-    });
+            return;            
+        } 
+
+        // Display user info on the dashboard profile dropdown
+        document.getElementById("dropdownUsername").textContent = userData.username;
+        document.getElementById("dropdownEmail").textContent = userData.email;
+
+        // Fetch the checklist (server-backend)
+        const checklistResp = await fetch('/getChecklist');
+        if (!checklistResp.ok) throw new Error('Failed to load checklist');
+        const checklistJson = await checklistResp.json();
+        
+        userChecklist = {
+          domain: !!checklistJson.domain,
+          template: !!checklistJson.template,
+          project: !!checklistJson.project,
+          resume: !!checklistJson.resume,
+          design: !!checklistJson.design
+        };
+
+        renderChecklist();
+
+      } catch(err) {
+        console.error("Error fetching user info:", err);
+      }      
+    }   
+
+    // Save checklist to server (sends complete checklist object)
+    async function saveChecklist() {
+      try {
+        await fetch('/saveChecklist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userChecklist)
+        });       
+      } catch (err) {
+        console.error("Failed saving checklist:", err);
+      }
+    }
 
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       try {
@@ -414,6 +457,8 @@
         console.error("Logout error:", error);
       }
     });
+
+    document.addEventListener("DOMContentLoaded", init);
 
   </script>
   <script src="script.js"></script>

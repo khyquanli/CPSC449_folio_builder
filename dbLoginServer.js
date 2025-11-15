@@ -10,6 +10,7 @@ const port = 3000;
 
 app.use(express.static(path.join(__dirname))); // Serves your static files (like dashboard.html)
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // Allows frontend to send JSON
 
 // MySQL Connection
 const db = mysql.createConnection({
@@ -53,6 +54,7 @@ app.get("/register", (req, res) => {
   res.sendFile(path.join(__dirname, "userRegister.html"));
 });
 
+// Login Handler
 app.post("/login", (req, res) => {
   const { username, input_password } = req.body;
 
@@ -76,10 +78,10 @@ app.post("/login", (req, res) => {
 
       if (match) {
         // Store user info in session
-        req.session.user = { 
-          id: user.id, 
-          username: user.username, 
-          email: user.email 
+        req.session.user = {
+          id: user.id,
+          username: user.username,
+          email: user.email
         };
         console.log("Login successful:", username);
         res.redirect("/dashboard.html"); // Redirect to dashboard
@@ -90,6 +92,7 @@ app.post("/login", (req, res) => {
   });
 });
 
+// Registration Handler
 app.post("/register", (req, res) => {
   const { username, email, input_password, confirm_password } = req.body;
 
@@ -103,7 +106,7 @@ app.post("/register", (req, res) => {
       return res.status(500).send("Error hashing password");
     }
 
-    db.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashed_password], (err) => {
+    db.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashed_password], (err, results) => {
       if (err) {
         console.error(err);
         if (err.code === 'ER_DUP_ENTRY') {
@@ -117,6 +120,20 @@ app.post("/register", (req, res) => {
         return res.status(500).send("Database error");
       }
 
+      const userId = results.insertId;
+
+      // Initialize empty setup checklist for new user
+      db.query(
+        "INSERT INTO user_checklist (user_id, checklist_state) VALUES (?, ?)",
+        [userId, JSON.stringify({
+          domain: false,
+          template: false,
+          project: false,
+          resume: false,
+          design: false
+        })]
+      );
+
       console.log("User registered:", username);
       res.redirect("/login")
     });
@@ -125,17 +142,52 @@ app.post("/register", (req, res) => {
 
 // Get user info for dashboard/profile menu
 app.get("/getUserInfo", (req, res) => {
-  if (req.session.user) {
-    res.json({
-      loggedIn: true,
-      username: req.session.user.username,
-      email: req.session.user.email,
-    });
-  } else {
+  if (!req.session.user) {
     res.json({ loggedIn: false });
   }
+  res.json({
+    loggedIn: true,
+    username: req.session.user.username,
+    email: req.session.user.email,
+  });
 });
 
+// Get user checklist from DB
+app.get("/getChecklist", (req, res) => {
+  if (!req.session.user) return res.status(401).json({ error: "Not logged in" });
+
+  const userId = req.session.user.id;
+
+  db.query(
+    "SELECT checklist_state FROM user_checklist WHERE user_id = ?",
+    [userId],
+    (err, results) => {
+      if (err) return res.status(500).json({ error: "Database error" });
+
+      return res.json(results[0].checklist_state);
+    }
+  );
+});
+
+// Save checklist updates
+app.post("/saveChecklist", (req, res) => {
+  if (!req.session.user) return res.status(401).json({ error: "Not logged in" });
+
+  const userId = req.session.user.id;
+  const updatedChecklist = req.body;
+
+  db.query(
+    "UPDATE user_checklist SET checklist_state = ? WHERE user_id = ?",
+    [JSON.stringify(updatedChecklist), userId],
+    err => {
+      if (err) return res.status(500).json({ error: "Database error" });
+
+      return res.json({ success: true });
+    }
+  );
+});
+
+// Logout Handler
 app.post("/logout", (req, res) => {
   req.session.destroy(err => {
     if (err) {
