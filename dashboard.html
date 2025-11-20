@@ -444,20 +444,6 @@
       }
     }
 
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-      try {
-        const response = await fetch("/logout", { method: "POST" });
-        if (response.ok) {
-          // Redirect to home page after logout
-          window.location.href = "/";
-        } else {
-          alert("Error logging out. Please try again.");
-        }
-      } catch (error) {
-        console.error("Logout error:", error);
-      }
-    });
-
     document.addEventListener("DOMContentLoaded", init);
 
   </script>

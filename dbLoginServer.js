@@ -140,6 +140,10 @@ app.post("/register", (req, res) => {
   });
 });
 
+app.get("/checkSession", (req, res) => {
+  res.json({ loggedIn: !!req.session.user });
+});
+
 // Get user info for dashboard/profile menu
 app.get("/getUserInfo", (req, res) => {
   if (!req.session.user) {
