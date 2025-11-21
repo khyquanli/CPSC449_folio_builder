@@ -228,10 +228,11 @@
 
   <div class="group-label">Workspace</div>
   <a class="item" href="#setup"         data-pop="pop-setup"><span class="icon">tune</span><span class="text">Setup</span></a>
-<!-- Sidebar items (examples) -->
+<!-- Sidebar items-->
 <a class="item" href="#portfolio" data-panel="portfolioPanel">
   <span class="icon">work</span><span class="text">Portfolio</span>
 </a>
+
 <a class="item" href="#applications" data-panel="applicationsPanel">
   <span class="icon">assignment_turned_in</span><span class="text">Job Applications</span>
 </a>
@@ -249,13 +250,15 @@
   <div style="height:8px"></div>
 </aside>
 
-<!-- Panels (place these once, outside the sidebar but inside the same page) -->
+<!-- inside #portfolioPanel -->
 <div id="portfolioPanel" class="panel" hidden>
   <div class="panel-header">Portfolio</div>
   <a class="panel-link" href="#portfolio-overview">Overview</a>
+  <a class="panel-link" href="#portfolio-my-portfolios">My Portfolios</a>
   <a class="panel-link" href="#portfolio-templates">Templates</a>
   <a class="panel-link" href="#portfolio-resumes">Resumes</a>
 </div>
+
 
 <div id="applicationsPanel" class="panel" hidden>
   <div class="panel-header">Job Applications</div>
@@ -292,6 +295,42 @@
           <!-- Tasks (rendered from JS) -->
         </div>
       </section>
+
+      <section id="page-portfolio" class="card pad" style="display:none">
+  <div class="row" style="justify-content:space-between; align-items:center;">
+    <div>
+      <h1 class="title" style="margin:0">My Portfolios</h1>
+      <p class="muted" style="margin:4px 0 0">Choose a template or manage your existing portfolios.</p>
+    </div>
+    <div class="row" style="gap:8px">
+      <button id="btnCreatePortfolio" class="btn btn-primary">Create Portfolio</button>
+      <button id="btnUpgrade" class="btn" style="display:none">Upgrade</button>
+    </div>
+  </div>
+
+  <!-- Template gallery -->
+  <div class="muted" style="margin:18px 0 8px;">Templates</div>
+  <div class="pf-gallery" id="tmplGallery"></div>
+
+  <!-- Divider -->
+  <div style="height:14px"></div>
+
+  <!-- My Portfolios -->
+  <div class="muted" style="margin:0 0 8px;">Previous 7 days</div>
+  <div class="pf-grid" id="pfGrid"></div>
+
+  <!-- Empty state (hidden when you have items) -->
+  <div id="pfEmpty" class="pf-empty" style="display:none;">
+    <div class="pf-empty-card">
+      <div class="pf-empty-thumb"></div>
+      <div class="pf-empty-meta">
+        <div class="pf-empty-title">No portfolios yet</div>
+        <div class="muted">Click “Create Portfolio” to start from a template.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
     </main>
   </div>
 
@@ -413,9 +452,121 @@
       } catch (error) {
         console.error("Logout error:", error);
       }
+
+      // --- Simple view switcher ---
+const homeView = document.getElementById('homeView') || document.querySelector('[data-view="home"]');
+let routeContainer = document.getElementById('routeContainer');
+
+if (!routeContainer) {
+  // Create a container we can render into (sits in <main>)
+  const main = document.getElementById('main');
+  routeContainer = document.createElement('section');
+  routeContainer.id = 'routeContainer';
+  routeContainer.className = 'card pad';
+  routeContainer.hidden = true;
+  main.appendChild(routeContainer);
+}
+
+// Close any open side panel
+function closePanels() {
+  document.querySelectorAll('.panel').forEach(p => p.hidden = true);
+}
+
+// Show a specific view
+function show(view) {
+  if (view === 'home') {
+    if (homeView) homeView.hidden = false;
+    routeContainer.hidden = true;
+  } else {
+    if (homeView) homeView.hidden = true;
+    routeContainer.hidden = false;
+  }
+  closePanels();
+}
+
+// --- Renderers ---
+function renderPortfolioList() {
+  routeContainer.innerHTML = `
+    <h2 style="margin:0 0 10px;">My Portfolios</h2>
+    <p class="muted" style="margin-top:0">Create and manage your portfolios.</p>
+
+    <!-- Template row (like Google Docs templates) -->
+    <div class="templates-row">
+      <div class="template-tile">Blank</div>
+      <div class="template-tile">Resume (Serif)</div>
+      <div class="template-tile">Resume (Swiss)</div>
+      <div class="template-tile">Project proposal</div>
+      <div class="template-tile">Brochure</div>
+    </div>
+
+    <h3 style="margin:18px 0 10px;">Previous portfolios</h3>
+    <div class="portfolio-grid">
+      <button class="portfolio-card new">
+        <span class="icon" style="font-size:20px;">add</span>
+        <div>Create Portfolio</div>
+      </button>
+      <div class="portfolio-card"></div>
+      <div class="portfolio-card"></div>
+      <div class="portfolio-card"></div>
+    </div>
+  `;
+  show('portfolio:list');
+}
+
+function renderPortfolioTemplates() {
+  routeContainer.innerHTML = `
+    <h2 style="margin:0 0 10px;">Templates</h2>
+    <p class="muted">Starter layouts you can use.</p>
+    <div class="templates-row">
+      <div class="template-tile">Blank</div>
+      <div class="template-tile">Case Study</div>
+      <div class="template-tile">Gallery</div>
+      <div class="template-tile">Landing</div>
+    </div>
+  `;
+  show('portfolio:templates');
+}
+
+function renderPortfolioOverview() {
+  routeContainer.innerHTML = `
+    <h2 style="margin:0 0 10px;">Portfolio Overview</h2>
+    <p class="muted">High-level summary goes here.</p>
+  `;
+  show('portfolio:overview');
+}
+
+function renderResumes() {
+  routeContainer.innerHTML = `
+    <h2 style="margin:0 0 10px;">Resumes</h2>
+    <p class="muted">Upload or select a resume to attach to a portfolio.</p>
+  `;
+  show('portfolio:resumes');
+}
+
+// Route table
+const routes = {
+  'portfolio:list': renderPortfolioList,
+  'portfolio:templates': renderPortfolioTemplates,
+  'portfolio:overview': renderPortfolioOverview,
+  'portfolio:resumes': renderResumes
+};
+
+// Catch clicks from the panel
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('[data-route]');
+  if (!link) return;
+  e.preventDefault();
+  const route = link.dataset.route;
+  routes[route]?.();
+});
+
+
+
     });
 
   </script>
   <script src="script.js"></script>
 </body>
 </html>
+
+
