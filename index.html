@@ -29,8 +29,8 @@
         <h1>Folio builder</h1>
         <p class="subtext">Build the portfolio of your dreams in minutes</p>
         <div class="cta">
-          <a class="btn btn-primary" href="/register">Get started</a>
-          <a class="btn btn-ghost" href="/login">Sign in</a>
+          <a class="btn btn-primary" id="getStartedBtn">Get started</a>
+          <a class="btn btn-ghost" id="signInBtn" href="/login">Sign in</a>
         </div>
       </div>
     </section>
@@ -154,12 +154,22 @@
   <!-- site JS -->
   <script src="script.js"></script>
 
-  <!-- Inject navbar.html into #navbar -->
-  <script>
-    fetch('navbar.html')
-      .then(r => r.text())
-      .then(html => { document.getElementById('navbar').innerHTML = html; })
-      .catch(() => { console.warn('navbar.html failed to load'); });
+  <script>   
+      // Redirect Get Started button depending on login session
+      fetch("/checkSession")
+        .then(res => res.json())
+        .then(data => {
+          const getStartedBtn = document.getElementById("getStartedBtn");
+          const signInBtn = document.getElementById("signInBtn");
+
+          if (data.loggedIn) {
+            getStartedBtn.href = "/dashboard.html";   // logged-in users go to dashboard
+            signInBtn.style.display = "none"
+          } else {
+            getStartedBtn.href = "/register";         // new users go to sign-up
+            signInBtn.style.display = "flex"
+          }
+        });
   </script>
 </body>
 </html>

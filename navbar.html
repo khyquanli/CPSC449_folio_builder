@@ -29,8 +29,21 @@
 
     <!-- RIGHT SECTION: Log In + Get Started -->
     <div class="nav-right">
-        <button class="btn btn-login" onclick="window.location.href='login.html'">
-            Log In</button>
-        <button class="btn btn-start" onclick="window.location.href='userRegister.html'">Get Started</button>
+        <div id="loggedOutNav">
+            <button class="btn btn-login" onclick="window.location.href='login.html'">Log In</button>
+            <button class="btn btn-start" onclick="window.location.href='userRegister.html'">Get Started</button>
+        </div>
+        <!-- Logged-in profile dropdown -->
+        <div id="loggedInNav" class="profile-menu" style="display: none;">
+            <img src="assets/default-headshot.jpg" class="profile-icon">
+
+            <div class="profile-dropdown">
+                <button class="dropdown-btn" id="accountSettingsBtn">Account Settings</button>
+                <button class="dropdown-btn logout" id="logoutBtn">Log Out</button>
+            </div>
+        </div>
     </div>
+
+    <script src="script.js"></script>
+
 </nav>

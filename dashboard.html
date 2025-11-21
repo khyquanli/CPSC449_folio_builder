@@ -4,372 +4,291 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dashboard • Folio Builder</title>
-  <!-- Favicon -->
-  <link rel="icon" type="image/jpeg" href="assets/placeholder-icon.jpg" />
 
   <!-- Material Symbols (icons) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=7">
-
   <style>
-    /* ===============  Design tokens  =============== */
+    /* ====== Minimal tokens (kept light so it plays nice with your styles.css) ====== */
     :root{
-      --bg: #f4f6fb;
-      --surface: #ffffff;
-      --ink: #111319;
-      --muted: #6b7280;
-      --border: #e6e8ee;
-      --brand: #0f62fe;
-      --brand-ink: #fff;
-      --radius: 14px;
-      --shadow: 0 1px 2px rgba(17,19,25,0.05), 0 12px 30px rgba(17,19,25,0.06);
+      --bg:#f4f6fb; --surface:#fff; --ink:#111319; --muted:#6b7280; --border:#e6e8ee;
+      --brand:#0f62fe; --brand-ink:#fff; --radius:14px;
+      --shadow:0 1px 2px rgba(17,19,25,0.05), 0 12px 30px rgba(17,19,25,0.06);
     }
-    * { box-sizing: border-box; }
-    html,body { margin:0; padding:0; height:100%; background:var(--bg); color:var(--ink);
+    *{ box-sizing:border-box; } html,body{ margin:0; background:var(--bg); color:var(--ink);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; }
+    a{ color:inherit; text-decoration:none; }
 
-    a { color: inherit; text-decoration: none; }
-
-    /* ===============  Top bar  =============== */
-    .topbar {
-      position: sticky; top:0; z-index: 20;
-      height:56px; background:var(--surface);
-      border-bottom:1px solid var(--border);
-      display:flex; align-items:center; gap:12px; padding:0 12px;
-    }
-    .brand { display:flex; align-items:center; gap:10px; font-weight:700; }
-    .brand .logo { width:28px; height:28px; border-radius:6px; background:var(--brand); display:inline-flex;
-      align-items:center; justify-content:center; color:var(--brand-ink); font-size:14px; }
-    .topbar .grow { flex:1; }
-    .search {
-      display:flex; align-items:center; gap:8px; padding:6px 10px; background:#fff;
-      border:1px solid var(--border); border-radius:10px; max-width:540px; width:100%;
-    }
+    /* ====== Topbar ====== */
+    .topbar{ position:sticky; top:0; z-index:20; height:56px; background:var(--surface);
+      border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; padding:0 12px; }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:700; }
+    .logo-img{ width:28px; height:28px; border-radius:6px; object-fit:cover; }
+    .muted{ color:var(--muted); }
+    .grow{ flex:1; }
+    .search{ display:flex; align-items:center; gap:8px; padding:6px 10px; background:#fff;
+      border:1px solid var(--border); border-radius:10px; max-width:540px; width:100%; }
     .search input{ border:0; outline:0; width:100%; font:inherit; }
-    .top-actions { display:flex; gap:8px; }
-    .btn {
-      display:inline-flex; align-items:center; gap:8px; padding:8px 12px;
-      border:1px solid var(--border); border-radius:10px; background:#fff; cursor:pointer; font-weight:600;
+    .btn{ display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border:1px solid var(--border);
+      border-radius:10px; background:#fff; cursor:pointer; font-weight:600; }
+    .btn-primary{ background:var(--brand); color:var(--brand-ink); border-color:var(--brand); }
+    .icon{ font-family: "Material Symbols Outlined"; font-size:20px; line-height:1; }
+    .top-actions{ display:flex; gap:12px; align-items:center; }
+
+    /* Icon buttons (Inbox/Notif/Account) */
+    .icon-btn{
+      position:relative; display:inline-flex; align-items:center; justify-content:center;
+      width:36px; height:36px; border-radius:999px; cursor:pointer; background:transparent; border:none;
     }
-    .btn-primary { background:var(--brand); color:var(--brand-ink); border-color:var(--brand); }
-    /* Improve icons: make sure the variable axes are set */
-    .icon {
-      font-family: "Material Symbols Outlined";
-      font-weight: normal;
-      font-style: normal;
-      font-size: 20px;
-      line-height: 1;
-      display: inline-block;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    .icon-btn:hover{ background:#f2f5ff; }
+    .icon-btn .icon{ font-family:"Material Symbols Outlined"; font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; font-size:22px; color:#374151; }
+    .badge{
+      position:absolute; top:-3px; right:-3px; min-width:18px; height:18px; padding:0 5px;
+      border-radius:999px; background:#ef4444; color:#fff; font-size:11px; line-height:18px; font-weight:700; text-align:center; border:2px solid #fff;
     }
 
-    .menu-btn { display:inline-flex; align-items:center; gap:6px; }
+    /* Profile dropdown */
+    .profile-dropdown{ position:absolute; top:56px; right:12px; width:280px; background:#fff; border:1px solid var(--border);
+      border-radius:12px; box-shadow:var(--shadow); display:none; z-index:30; overflow:hidden; }
+    .profile-dropdown.show{ display:block; }
+    .profile-dropdown .menu-title{ font-weight:700; padding:10px 12px; border-bottom:1px solid var(--border); background:#fafbff; }
+    .profile-dropdown .menu-item{ padding:10px 12px; border-bottom:1px solid var(--border); }
+    .profile-dropdown .menu-item:last-child{ border-bottom:0; }
 
-    /* ===============  Layout (sidebar + main)  =============== */
-    .shell { position:relative; }
-    .sidebar {
-      position: fixed; top:56px; left:0; bottom:0; width:252px; background:#fff;
-      border-right:1px solid var(--border); padding:12px; overflow:auto; z-index:10;
+    /* ====== Layout ====== */
+    .shell{ position:relative; }
+    .sidebar{ position:fixed; top:56px; left:0; bottom:0; width:252px; background:#fff; border-right:1px solid var(--border); padding:12px; overflow:auto; z-index:10; }
+    .sidebar.is-collapsed{ width:72px; }
+    .sidebar .group-label{ font-size:.78rem; color:var(--muted); margin:10px 8px 6px; }
+    .sidebar .item{ display:flex; align-items:center; gap:12px; padding:10px 10px; border-radius:10px; color:#2b2f37; }
+    .sidebar .item:hover{ background:#f4f7ff; }
+    .sidebar .item .text{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .nav-sep{ border-top:1px solid var(--border); margin:10px 8px; }
+
+    .main{ margin:16px; margin-left: calc(252px + 16px); }
+    .sidebar.is-collapsed ~ .main{ margin-left: calc(72px + 16px); }
+
+    /* Panels that slide over content (Portfolio/Applications/Analytics) */
+    .panel{
+      position: fixed; top:72px; left:252px; min-width:300px; max-width:360px; background:#fff;
+      border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); padding:12px; z-index:30;
     }
-    .sidebar.is-collapsed { width:72px; }
-    .sidebar .group-label { font-size:.78rem; color:var(--muted); margin:10px 8px 6px; }
-    .sidebar .item {
-      display:flex; align-items:center; gap:12px; padding:10px 10px; border-radius:10px; color:#2b2f37;
-    }
-    .sidebar .item:hover { background:#f4f7ff; }
-    .sidebar .item .text { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .sidebar.is-collapsed .text { display:none; }
-    .quick {
-      border:1px dashed var(--border); background:#fafbff; border-radius:12px; padding:10px; margin-bottom:10px;
-    }
-    .quick .btn { width:100%; justify-content:center; }
+    .sidebar.is-collapsed ~ .panel{ left:72px; }
 
-    .main {
-      margin:16px; margin-left: calc(252px + 16px);
-    }
-    .sidebar.is-collapsed ~ .main { margin-left: calc(72px + 16px); }
+    /* Cards */
+    .card{ background:#fff; border:1px solid var(--border); border-radius:var(--radius); box-shadow: var(--shadow); }
+    .pad{ padding:16px; }
+    .title{ font-size:clamp(22px, 3.2vw, 32px); margin:0 0 4px; }
 
-    /* ===============  Cards / sections  =============== */
-    .card {
-      background:#fff; border:1px solid var(--border); border-radius:var(--radius); box-shadow: var(--shadow);
-    }
-    .pad { padding:16px; }
-    .title { font-size:clamp(22px, 3.2vw, 32px); margin:0 0 4px; }
-    .muted { color:var(--muted); }
-    .row { display:flex; align-items:center; gap:10px; }
-    .sp { height:12px; }
+    /* Checklist */
+    .checklist-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
+    .progress{ display:flex; align-items:center; gap:8px; font-weight:600; }
+    .meter{ height:8px; width:180px; background:#eef0f6; border-radius:999px; overflow:hidden; border:1px solid var(--border); }
+    .meter > i{ display:block; height:100%; width:0%; background:var(--brand); }
+    .tasks{ display:grid; gap:8px; }
+    .task{ display:grid; grid-template-columns:28px 1fr auto; align-items:center; gap:8px; border:1px solid var(--border); border-radius:12px; padding:10px 12px; background:#fff; }
+    .chip{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:#fff; font-weight:600; }
+    .chip.primary{ background:var(--brand); color:#fff; border-color:var(--brand); }
 
-    /* ===============  Checklist  =============== */
-    .checklist-head {
-      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px;
-    }
-    .progress {
-      display:flex; align-items:center; gap:8px; font-weight:600;
-    }
-    .meter {
-      height:8px; width:180px; background:#eef0f6; border-radius:999px; overflow:hidden; border:1px solid var(--border);
-    }
-    .meter > i { display:block; height:100%; width:0%; background:var(--brand); }
-
-    .tasks { display:grid; gap:8px; }
-    .task {
-      display:grid; grid-template-columns: 28px 1fr auto; align-items:center; gap:8px;
-      border:1px solid var(--border); border-radius:12px; padding:10px 12px; background:#fff;
-    }
-    .task .action { display:flex; gap:8px; }
-    .chip { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px;
-      border:1px solid var(--border); background:#fff; font-weight:600; }
-    .chip.primary { background:var(--brand); color:#fff; border-color:var(--brand); }
-
-    /* === Left sidebar pop menus === */
-.side-pop {
-  position: fixed;
-  left: 252px;                 
-  min-width: 280px;
-  max-width: 340px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-  padding: 10px;
-  z-index: 30;
-  display: none;             
-}
-.sidebar.is-collapsed + .side-pop,
-.sidebar.is-collapsed ~ .side-pop { left: 72px; }
-
-.side-pop .title {
-  font-size: .9rem;
-  font-weight: 700;
-  margin: 6px 6px 8px;
-  color: var(--ink);
-}
-.side-pop .item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px; border-radius: 10px; cursor: pointer;
-}
-.side-pop .item:hover { background: #f5f7ff; }
-.side-pop .item .icon {
-  font-family: "Material Symbols Outlined"; font-size: 20px;
-}
-.side-pop .sep { border-top: 1px solid var(--border); margin: 8px 6px; }
-
-.side-pop::before{
-  content:"";
-  position:absolute; top:12px; left:-6px;
-  width: 12px; height: 12px; rotate: 45deg;
-  background:#fff; border-left:1px solid var(--border); border-top:1px solid var(--border);
-}
-
-
-    /* ===============  Responsive  =============== */
-    @media (max-width: 980px){
-      .sidebar { transform: translateX(-100%); transition: transform .2s ease; width: 272px; }
-      .sidebar.is-open { transform: translateX(0); }
-      .main { margin-left:16px; }
-      .search { display:none; }
+    @media (max-width:980px){
+      .sidebar{ transform:translateX(-100%); transition:transform .2s ease; width:272px; }
+      .sidebar.is-open{ transform:translateX(0); }
+      .main{ margin-left:16px; }
+      .search{ display:none; }
     }
   </style>
 </head>
 <body>
   <!-- Top bar -->
   <header class="topbar">
-    <button class="btn menu-btn" id="sidebarToggle"><span class="icon">menu</span>menu</button>
+    <button class="btn" id="sidebarToggle"><span class="icon">menu</span>menu</button>
+
     <div class="brand">
-       <a href="index.html" class="nav-left">
-    <img src="assets/placeholder-icon.jpg" alt="Portfolio Logo" class="logo-img">
-      <span>Folio Builder</span>
+      <!-- IMPORTANT: no nested anchors -->
+      <a href="index.html" class="nav-left">
+        <img src="assets/placeholder-icon.jpg" alt="Portfolio Logo" class="logo-img">
+        <span>Folio Builder</span>
+      </a>
       <span class="muted">|</span>
       <a class="muted" href="#">My Site</a>
     </div>
+
     <div class="grow"></div>
+
     <label class="search">
       <span class="icon">search</span>
       <input placeholder="Search for tools, apps, help & more…" />
     </label>
-    <div class="top-actions">
-      <button class="icon-btn" aria-label="Inbox" data-menu="inboxMenu">
-        <span class="icon">inbox</span>
-        <span class="badge" id="inboxBadge">3</span>
-      </button>
 
-      <button class="icon-btn" aria-label="Notifications" data-menu="notifMenu">
-        <span class="icon">notifications</span>
-        <span class="badge" id="notifBadge">2</span>
-      </button>
+    <!-- CTA shown/hidden by session state (used on home too); safe to keep here -->
+    <a class="btn" data-cta="signin" href="/login">Sign In</a>
+    <a class="btn btn-primary" data-cta="getstarted" href="/register">Get started</a>
 
-      <button class="icon-btn" aria-label="Account" data-menu="acctMenu" id="profileIconBtn">
+    <!-- Top-right icons (visible only when logged in) -->
+    <div class="top-actions" id="topActions">
+      <button class="icon-btn" aria-label="Inbox" data-panel="inboxPanel">
+        <span class="icon">inbox</span><span class="badge" id="inboxBadge">3</span>
+      </button>
+      <button class="icon-btn" aria-label="Notifications" data-panel="notifPanel">
+        <span class="icon">notifications</span><span class="badge" id="notifBadge">2</span>
+      </button>
+      <button class="icon-btn" aria-label="Account" id="profileIconBtn">
         <span class="icon">account_circle</span>
       </button>
+    </div>
 
-      <div class="profile-dropdown" id="profileDropdown">
-        <div class="profile-info">
-          <div class="username" id="dropdownUsername"><b>Username</b></div>
-          <div class="email" id="dropdownEmail">Email</div>
-        </div>
-        <hr>
-        <button class="dropdown-btn" id="accountSettingsBtn">Account Settings</button>
-        <button class="dropdown-btn logout" id="logoutBtn">Log Out</button>
-      </div>
+    <!-- Profile dropdown (reused on home + dashboard) -->
+    <div class="profile-dropdown" id="profileDropdown" aria-hidden="true">
+      <div class="menu-title">Account</div>
+      <div class="menu-item"><strong id="profileName">—</strong><br><span id="profileEmail" class="muted">—</span></div>
+      <div class="menu-item"><a href="/settings">Settings</a></div>
+      <div class="menu-item"><button class="btn" id="logoutBtn">Log out</button></div>
     </div>
   </header>
 
   <div class="shell">
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
-  <div class="quick">
-    <div class="group-label">Quick Actions</div>
-    <button class="btn"><span class="icon">add</span>Create Portfolio</button>
-  </div>
+      <div class="group-label">Workspace</div>
+      <a class="item" href="#setup"><span class="icon">tune</span><span class="text">Setup</span></a>
+      <a class="item" href="#portfolio" data-panel="portfolioPanel"><span class="icon">work</span><span class="text">Portfolio</span></a>
+      <a class="item" href="#applications" data-panel="applicationsPanel"><span class="icon">assignment_turned_in</span><span class="text">Job Applications</span></a>
+      <a class="item" href="#analytics" data-panel="analyticsPanel"><span class="icon">insights</span><span class="text">Analytics</span></a>
 
-  <div class="group-label">Workspace</div>
-  <a class="item" href="#setup"         data-pop="pop-setup"><span class="icon">tune</span><span class="text">Setup</span></a>
-<!-- Sidebar items-->
-<a class="item" href="#portfolio" data-panel="portfolioPanel">
-  <span class="icon">work</span><span class="text">Portfolio</span>
-</a>
+      <div class="nav-sep"></div>
 
-<a class="item" href="#applications" data-panel="applicationsPanel">
-  <span class="icon">assignment_turned_in</span><span class="text">Job Applications</span>
-</a>
-<a class="item" href="#analytics" data-panel="analyticsPanel">
-  <span class="icon">insights</span><span class="text">Analytics</span>
-</a>
+      <div class="group-label">Other</div>
+      <a class="item" href="#inbox" data-panel="inboxPanel"><span class="icon">inbox</span><span class="text">Inbox</span></a>
+      <a class="item" href="#settings"><span class="icon">settings</span><span class="text">Settings</span></a>
+      <a class="item" href="#help"><span class="icon">help</span><span class="text">Help</span></a>
+      <div style="height:8px"></div>
+    </aside>
 
-  <div class="nav-sep"></div>
+    <!-- Panels (one instance each; toggle by data-panel) -->
+    <div class="panel" id="portfolioPanel" hidden>
+      <h3 style="margin:6px 0 10px">Portfolio</h3>
+      <div>
+        <button class="btn btn-primary" data-route="create-portfolio">Create Portfolio</button>
+      </div>
+      <hr>
+      <div id="portfolioList" class="muted">No portfolios yet.</div>
+    </div>
 
-  <div class="group-label">Other</div>
-  <a class="item" href="#inbox"><span class="icon">inbox</span><span class="text">Inbox</span></a>
-  <a class="item" href="#settings"><span class="icon">settings</span><span class="text">Settings</span></a>
-  <a class="item" href="#help"><span class="icon">help</span><span class="text">Help</span></a>
+    <div class="panel" id="applicationsPanel" hidden>
+      <h3 style="margin:6px 0 10px">Job Applications</h3>
+      <div class="muted">Track applications, statuses, interviews, notes.</div>
+    </div>
 
-  <div style="height:8px"></div>
-</aside>
+    <div class="panel" id="analyticsPanel" hidden>
+      <h3 style="margin:6px 0 10px">Analytics</h3>
+      <div class="muted">Views, referrers, clicks (premium later).</div>
+    </div>
 
-<!-- inside #portfolioPanel -->
-<div id="portfolioPanel" class="panel" hidden>
-  <div class="panel-header">Portfolio</div>
-  <a class="panel-link" href="#portfolio-overview">Overview</a>
-  <a class="panel-link" href="#portfolio-my-portfolios">My Portfolios</a>
-  <a class="panel-link" href="#portfolio-templates">Templates</a>
-  <a class="panel-link" href="#portfolio-resumes">Resumes</a>
-</div>
+    <div class="panel" id="inboxPanel" hidden>
+      <h3 style="margin:6px 0 10px">Inbox</h3>
+      <div class="muted">Messages & notifications.</div>
+    </div>
 
-
-<div id="applicationsPanel" class="panel" hidden>
-  <div class="panel-header">Job Applications</div>
-  <a class="panel-link" href="#apps-tracker">Tracker</a>
-  <a class="panel-link" href="#apps-resumes">Resumes</a>
-  <a class="panel-link" href="#apps-calendar">Calendar</a>
-</div>
-
-<div id="analyticsPanel" class="panel" hidden>
-  <div class="panel-header">Analytics</div>
-  <a class="panel-link" href="#analytics-overview">Overview</a>
-  <a class="panel-link" href="#analytics-traffic">Traffic</a>
-  <a class="panel-link" href="#analytics-conversions">Conversions</a>
-</div>
-
-
-    <!-- Main -->
+    <!-- Main content -->
     <main class="main" id="main">
       <section class="card pad">
         <h1 class="title">Welcome to your Dashboard</h1>
-        <p class="muted">Let’s set up your Portfolio</p>
-        <div class="sp"></div>
+        <p class="muted">Let’s set up your business</p>
+        <div style="height:12px"></div>
 
         <div class="checklist-head">
-          <div class="row muted">
-            <span id="countLabel">0/6 completed</span>
-          </div>
-          <div class="progress">
-            <div class="meter"><i id="meterBar" style="width:0%"></i></div>
-          </div>
+          <div class="muted"><span id="countLabel">0/4 completed</span></div>
+          <div class="progress"><div class="meter"><i id="meterBar" style="width:0%"></i></div></div>
         </div>
 
-        <div class="tasks" id="tasks">
-          <!-- Tasks (rendered from JS) -->
-        </div>
+        <div class="tasks" id="tasks"></div>
       </section>
-
-      <section id="page-portfolio" class="card pad" style="display:none">
-  <div class="row" style="justify-content:space-between; align-items:center;">
-    <div>
-      <h1 class="title" style="margin:0">My Portfolios</h1>
-      <p class="muted" style="margin:4px 0 0">Choose a template or manage your existing portfolios.</p>
-    </div>
-    <div class="row" style="gap:8px">
-      <button id="btnCreatePortfolio" class="btn btn-primary">Create Portfolio</button>
-      <button id="btnUpgrade" class="btn" style="display:none">Upgrade</button>
-    </div>
-  </div>
-
-  <!-- Template gallery -->
-  <div class="muted" style="margin:18px 0 8px;">Templates</div>
-  <div class="pf-gallery" id="tmplGallery"></div>
-
-  <!-- Divider -->
-  <div style="height:14px"></div>
-
-  <!-- My Portfolios -->
-  <div class="muted" style="margin:0 0 8px;">Previous 7 days</div>
-  <div class="pf-grid" id="pfGrid"></div>
-
-  <!-- Empty state (hidden when you have items) -->
-  <div id="pfEmpty" class="pf-empty" style="display:none;">
-    <div class="pf-empty-card">
-      <div class="pf-empty-thumb"></div>
-      <div class="pf-empty-meta">
-        <div class="pf-empty-title">No portfolios yet</div>
-        <div class="muted">Click “Create Portfolio” to start from a template.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
     </main>
   </div>
 
   <script>
-    // ----- Sidebar toggle (desktop collapse, mobile slide-in) -----
-    const sidebar = document.getElementById('sidebar');
-    const toggle  = document.getElementById('sidebarToggle');
-    function toggleSidebar(){
+    /* ====================== Helpers ====================== */
+    const $  = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const safeJSON = async (res) => { try { return await res.json(); } catch { return null; } };
+    const fetchJSON = async (url, opts={}) => { const r = await fetch(url, opts); if(!r.ok) throw new Error(r.statusText); return safeJSON(r); };
+
+    /* ====================== Sidebar toggle ====================== */
+    const sidebar = $('#sidebar');
+    $('#sidebarToggle')?.addEventListener('click', () => {
       if (window.matchMedia('(max-width: 980px)').matches){
         sidebar.classList.toggle('is-open');
       } else {
         sidebar.classList.toggle('is-collapsed');
       }
+    });
+
+    /* ====================== Panels: open/close ====================== */
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('[data-panel]');
+      if (link){
+        e.preventDefault();
+        const id = link.getAttribute('data-panel');
+        $$('.panel').forEach(p => p.hidden = true);
+        const panel = document.getElementById(id);
+        if (panel) panel.hidden = false;
+      } else {
+        // click-away close (except if clicking inside any .panel)
+        const insidePanel = e.target.closest('.panel') || e.target.closest('[data-panel]');
+        if (!insidePanel) $$('.panel').forEach(p => p.hidden = true);
+      }
+    });
+
+    /* ====================== Profile dropdown ====================== */
+    const profileBtn = $('#profileIconBtn');
+    const profileDrop = $('#profileDropdown');
+    profileBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      profileDrop.classList.toggle('show');
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#profileDropdown') && !e.target.closest('#profileIconBtn')){
+        profileDrop?.classList.remove('show');
+      }
+    });
+
+    /* ====================== Session-aware UI ====================== */
+    function applySessionUI(isLoggedIn){
+      const signIn    = document.querySelector('[data-cta="signin"]');
+      const getStart  = document.querySelector('[data-cta="getstarted"]');
+      const topActs   = document.getElementById('topActions');
+      if (isLoggedIn){
+        if (signIn)   signIn.style.display = 'none';
+        if (getStart){ getStart.textContent = 'Go to Dashboard'; getStart.setAttribute('href','/dashboard.html'); }
+        if (topActs)  topActs.style.display = '';   // show icons
+      } else {
+        if (signIn)   signIn.style.display = '';
+        if (getStart){ getStart.textContent = 'Get started'; getStart.setAttribute('href','/register'); }
+        if (topActs)  topActs.style.display = 'none'; // hide icons
+      }
     }
-    toggle.addEventListener('click', toggleSidebar);
 
-    // ----- Checklist model -----
-    const steps = [
-      { id:'domain', label:'Connect a custom domain', cta:'Let’s Go' },
-      { id:'site-type', label:'Choose a template', btn:'', cta:'See Presets',icon:'check_circle' },
-      { id:'project', label:'Add a project to your portfolio', cta:'Add Project' },
-      { id:'design', label:'Upload your resume', cta:'Upload Resume' },
-      { id:'design', label:'Design your website', cta:'Design Site' },
-    ];
+    /* ====================== Server-backed checklist ====================== */
+    let userChecklist = {};    // single source of truth
 
-    const tasksEl   = document.getElementById('tasks');
-    const meterBar  = document.getElementById('meterBar');
-    const countLbl  = document.getElementById('countLabel');
+    function renderChecklist(){
+      const tasksEl  = $('#tasks');
+      const countLbl = $('#countLabel');
+      const meterBar = $('#meterBar');
 
-    // Persisted completion in localStorage
-    const KEY = 'fb_checklist';
-    const state = JSON.parse(localStorage.getItem(KEY) || '{}');
+      const steps = [
+        { id:'site-type', label:'Update your site type', cta:'Open' },
+        { id:'domain',    label:'Connect a custom domain', cta:'Let’s Go' },
+        { id:'project',   label:'Add a project to your portfolio', cta:'Add Project' },
+        { id:'design-site', label:'Design your website', cta:'Design Site' },
+      ];
 
-    function render(){
       tasksEl.innerHTML = '';
       let complete = 0;
 
       steps.forEach(step => {
-        const checked = !!state[step.id];
+        const checked = !!userChecklist[step.id];
         if (checked) complete++;
 
         const row = document.createElement('div');
@@ -378,7 +297,6 @@
           <label><input type="checkbox" ${checked ? 'checked' : ''} data-id="${step.id}" /></label>
           <div>
             <div style="font-weight:700">${step.label}</div>
-            ${step.sub ? `<div class="muted" style="font-size:.9rem">${step.sub}</div>` : ''}
           </div>
           <div class="action">
             ${step.cta ? `<button class="chip primary">${step.cta}</button>` : ''}
@@ -392,181 +310,93 @@
       countLbl.textContent = `${complete}/${steps.length} completed`;
     }
 
-    tasksEl.addEventListener('change', (e) => {
-      if (e.target.matches('input[type="checkbox"]')){
-        const id = e.target.getAttribute('data-id');
-        state[id] = e.target.checked;
-        localStorage.setItem(KEY, JSON.stringify(state));
-        render();
-      }
-    });
-
-    render();
-
-    // Profile dropdown toggle
-    const profileBtn = document.getElementById("profileIconBtn");
-    const profileDropdown = document.getElementById("profileDropdown");
-
-    if (profileBtn && profileDropdown) {
-      profileBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        profileDropdown.classList.toggle("show");
-      });
-
-      // Close dropdown if clicked outside
-      document.addEventListener("click", (e) => {
-        if (!profileDropdown.contains(e.target) && e.target !== profileBtn) {
-          profileDropdown.classList.remove("show");
-        }
-      });
+    async function saveChecklist(){
+      try{
+        await fetch('/saveChecklist', {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify(userChecklist)
+        });
+      }catch(e){ console.warn('saveChecklist failed:', e); }
     }
 
-    // Run this once the page loads
-    document.addEventListener("DOMContentLoaded", () => {
-      fetch("/getUserInfo")
-        .then(response => response.json())
-        .then(data => {
-          if (data.loggedIn) {
-            // Display user info on the dashboard profile dropdown
-            document.getElementById("dropdownUsername").textContent = data.username;
-            document.getElementById("dropdownEmail").textContent = data.email;
-          } else {
-            // If not logged in, redirect to login page
-            window.location.href = "/login.html";
-          }
-        })
-        .catch(err => {
-          console.error("Error fetching user info:", err);
-        });
+    document.addEventListener('change', (e) => {
+      if (e.target.matches('#tasks input[type="checkbox"]')){
+        const id = e.target.getAttribute('data-id');
+        userChecklist[id] = e.target.checked;
+        renderChecklist();
+        saveChecklist();
+      }
     });
 
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-      try {
-        const response = await fetch("/logout", { method: "POST" });
-        if (response.ok) {
-          // Redirect to home page after logout
-          window.location.href = "/";
-        } else {
-          alert("Error logging out. Please try again.");
+    /* ====================== Logout (and ensure router is NOT inside) ====================== */
+    document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+      try{
+        // If you have a backend endpoint, uncomment:
+        // await fetch('/logout', { method:'POST' });
+      } finally {
+        localStorage.removeItem('sessionUser');
+        location.href = '/index.html';
+      }
+    });
+
+    /* ====================== Simple “My Portfolios” view switcher ====================== */
+    const routes = {
+      'create-portfolio': () => {
+        const list = $('#portfolioList');
+        list.innerHTML = `
+          <div style="margin-bottom:8px"><strong>Create a new portfolio</strong></div>
+          <div class="muted">Templates (coming soon)</div>
+          <div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; margin-top:8px;">
+            <div style="height:80px; border:1px dashed var(--border); border-radius:12px;"></div>
+            <div style="height:80px; border:1px dashed var(--border); border-radius:12px;"></div>
+            <div style="height:80px; border:1px dashed var(--border); border-radius:12px;"></div>
+          </div>
+          <div style="margin-top:12px;">
+            <button class="btn btn-primary">Create</button>
+          </div>
+        `;
+      }
+    };
+
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('[data-route]');
+      if (!link) return;
+      e.preventDefault();
+      const r = link.getAttribute('data-route');
+      routes[r]?.();
+    });
+
+    /* ====================== Init ====================== */
+    async function init(){
+      // Load user info (classmate’s behavior)
+      try{
+        const user = await fetchJSON('/getUserInfo');
+        if (user){
+          const name = user.name || '—';
+          const email = user.email || '—';
+          $('#profileName').textContent = name;
+          $('#profileEmail').textContent = email;
+          localStorage.setItem('sessionUser', email || '1'); // basic client flag
+          applySessionUI(true);
+        }else{
+          applySessionUI(false);
         }
-      } catch (error) {
-        console.error("Logout error:", error);
+      }catch{
+        applySessionUI(false);
       }
 
-      // --- Simple view switcher ---
-const homeView = document.getElementById('homeView') || document.querySelector('[data-view="home"]');
-let routeContainer = document.getElementById('routeContainer');
+      // Load checklist (classmate’s behavior)
+      try{
+        const data = await fetchJSON('/getChecklist');
+        userChecklist = data || {};
+      }catch{
+        userChecklist = {};
+      }
+      renderChecklist();
+    }
 
-if (!routeContainer) {
-  // Create a container we can render into (sits in <main>)
-  const main = document.getElementById('main');
-  routeContainer = document.createElement('section');
-  routeContainer.id = 'routeContainer';
-  routeContainer.className = 'card pad';
-  routeContainer.hidden = true;
-  main.appendChild(routeContainer);
-}
-
-// Close any open side panel
-function closePanels() {
-  document.querySelectorAll('.panel').forEach(p => p.hidden = true);
-}
-
-// Show a specific view
-function show(view) {
-  if (view === 'home') {
-    if (homeView) homeView.hidden = false;
-    routeContainer.hidden = true;
-  } else {
-    if (homeView) homeView.hidden = true;
-    routeContainer.hidden = false;
-  }
-  closePanels();
-}
-
-// --- Renderers ---
-function renderPortfolioList() {
-  routeContainer.innerHTML = `
-    <h2 style="margin:0 0 10px;">My Portfolios</h2>
-    <p class="muted" style="margin-top:0">Create and manage your portfolios.</p>
-
-    <!-- Template row (like Google Docs templates) -->
-    <div class="templates-row">
-      <div class="template-tile">Blank</div>
-      <div class="template-tile">Resume (Serif)</div>
-      <div class="template-tile">Resume (Swiss)</div>
-      <div class="template-tile">Project proposal</div>
-      <div class="template-tile">Brochure</div>
-    </div>
-
-    <h3 style="margin:18px 0 10px;">Previous portfolios</h3>
-    <div class="portfolio-grid">
-      <button class="portfolio-card new">
-        <span class="icon" style="font-size:20px;">add</span>
-        <div>Create Portfolio</div>
-      </button>
-      <div class="portfolio-card"></div>
-      <div class="portfolio-card"></div>
-      <div class="portfolio-card"></div>
-    </div>
-  `;
-  show('portfolio:list');
-}
-
-function renderPortfolioTemplates() {
-  routeContainer.innerHTML = `
-    <h2 style="margin:0 0 10px;">Templates</h2>
-    <p class="muted">Starter layouts you can use.</p>
-    <div class="templates-row">
-      <div class="template-tile">Blank</div>
-      <div class="template-tile">Case Study</div>
-      <div class="template-tile">Gallery</div>
-      <div class="template-tile">Landing</div>
-    </div>
-  `;
-  show('portfolio:templates');
-}
-
-function renderPortfolioOverview() {
-  routeContainer.innerHTML = `
-    <h2 style="margin:0 0 10px;">Portfolio Overview</h2>
-    <p class="muted">High-level summary goes here.</p>
-  `;
-  show('portfolio:overview');
-}
-
-function renderResumes() {
-  routeContainer.innerHTML = `
-    <h2 style="margin:0 0 10px;">Resumes</h2>
-    <p class="muted">Upload or select a resume to attach to a portfolio.</p>
-  `;
-  show('portfolio:resumes');
-}
-
-// Route table
-const routes = {
-  'portfolio:list': renderPortfolioList,
-  'portfolio:templates': renderPortfolioTemplates,
-  'portfolio:overview': renderPortfolioOverview,
-  'portfolio:resumes': renderResumes
-};
-
-// Catch clicks from the panel
-document.addEventListener('click', (e) => {
-  const link = e.target.closest('[data-route]');
-  if (!link) return;
-  e.preventDefault();
-  const route = link.dataset.route;
-  routes[route]?.();
-});
-
-
-
-    });
-
+    init();
   </script>
-  <script src="script.js"></script>
 </body>
 </html>
-
-
