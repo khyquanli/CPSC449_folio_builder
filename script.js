@@ -34,6 +34,17 @@ function updateNavbarState() {
     .catch(err => console.error("Session check failed:", err));
 }
 
+/* ===== SIDEBAR INJECTION (shared left menu) ===== */
+fetch("sidebar.html")
+  .then((r) => r.text())
+  .then((html) => {
+    const host = document.getElementById("sidebarHost");
+    if (host) {
+      host.innerHTML = html;
+    }
+  })
+  .catch((err) => console.error("Error loading sidebar:", err));
+
 /* ===== OUR TEAM: REVEAL ON SCROLL ===== */
 function revealOnScroll() {
   document.querySelectorAll('.hidden').forEach(el => {

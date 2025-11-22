@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolios • Folio Builder</title>
+
+  <link rel="icon" type="image/jpeg" href="assets/placeholder-icon.jpg" />
+  <link rel="stylesheet" href="styles.css?v=7" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body class="pf-body">
+  <!-- Top navbar (same as the rest of the site) -->
+  <div id="navbar"></div>
+
+    <!-- App shell: shared sidebar + main content -->
+  <div class="shell">
+    <!-- Shared sidebar will be injected here by script.js -->
+    <div id="sidebarHost"></div>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main">
+      <!-- TOP: Template strip (Google Docs style) -->
+      <section class="pf-templates">
+        <h1 class="pf-title">Choose a template</h1>
+        <p class="pf-sub">
+          Start a new resume or portfolio from one of our presets.
+        </p>
+
+        <div class="pf-template-row">
+          <button class="pf-template-card">
+            <div class="pf-thumb blank"></div>
+            <div class="pf-template-name">Blank portfolio</div>
+          </button>
+
+          <button class="pf-template-card">
+            <div class="pf-thumb serif"></div>
+            <div class="pf-template-name">Resume – Serif</div>
+          </button>
+
+          <button class="pf-template-card">
+            <div class="pf-thumb swiss"></div>
+            <div class="pf-template-name">Resume – Swiss</div>
+          </button>
+
+          <button class="pf-template-card">
+            <div class="pf-thumb coral"></div>
+            <div class="pf-template-name">Resume – Coral</div>
+          </button>
+        </div>
+      </section>
+
+      <!-- BOTTOM: Grid of existing portfolios (Drive style) -->
+      <section class="pf-grid-section">
+        <div class="pf-grid-header">
+          <h2>Your portfolios</h2>
+          <button class="pf-btn-primary">
+            <span class="material-symbols-outlined">add</span>
+            New portfolio
+          </button>
+        </div>
+
+        <div class="pf-grid">
+          <!-- Example cards – later these will be populated from your DB -->
+          <article class="pf-card">
+            <div class="pf-card-thumb"></div>
+            <div class="pf-card-meta">
+              <div class="pf-card-title">Software Engineer Resume</div>
+              <div class="pf-card-sub">Last edited 3 days ago</div>
+            </div>
+          </article>
+
+          <article class="pf-card">
+            <div class="pf-card-thumb"></div>
+            <div class="pf-card-meta">
+              <div class="pf-card-title">Data Analyst Portfolio</div>
+              <div class="pf-card-sub">Last edited 1 week ago</div>
+            </div>
+          </article>
+
+          <!-- "Create new" card -->
+          <article class="pf-card pf-card-new">
+            <div class="pf-card-new-inner">
+              <span class="material-symbols-outlined">add</span>
+              <span>Create new</span>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
