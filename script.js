@@ -1,3 +1,23 @@
+/* ===== AUTHENTICATION CHECK ===== */
+function requireAuth() {
+  fetch('/checkSession')
+    .then(res => res.json())
+    .then(data => {
+      if (!data.loggedIn) {
+        window.location.href = '/login.html';
+      }
+    })
+    .catch(err => {
+      console.error('Session check failed:', err);
+      window.location.href = '/login.html';
+    });
+}
+
+// Auto-check authentication on protected pages
+if (document.body.hasAttribute('data-require-auth')) {
+  requireAuth();
+}
+
 /* ===== NAVBAR INJECTION ===== */
 fetch("navbar.html")
   .then(r => r.text())
@@ -16,7 +36,7 @@ function updateNavbarState() {
     .then(data => {
 
       const loggedOut = document.getElementById("loggedOutNav");
-      const loggedIn  = document.getElementById("loggedInNav");
+      const loggedIn = document.getElementById("loggedInNav");
 
       if (!loggedOut || !loggedIn) {
         console.warn("Navbar IDs not found — check navbar.html markup.");
@@ -88,8 +108,8 @@ function positionPanel(panel, opener) {
 
   // Place panel to the right of the item, aligned to its top
   panel.style.position = 'fixed';
-  panel.style.top  = `${opRect.top}px`;
-  panel.style.left = `${sbRect.right + 8}px`; 
+  panel.style.top = `${opRect.top}px`;
+  panel.style.left = `${sbRect.right + 8}px`;
   panel.style.zIndex = 1000;
 }
 
@@ -128,27 +148,49 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-/* === PROFILE DROPDOWN TOGGLE (NAVBAR) === */
+/* === PROFILE DROPDOWN TOGGLE === */
 document.addEventListener("click", (e) => {
-  const menu = document.querySelector("#loggedInNav");
-  const icon = document.querySelector("#loggedInNav .profile-icon");
-  const dropdown = document.querySelector("#loggedInNav .profile-dropdown");
+  const profileIcon = document.querySelector("#profileIconBtn");
+  const dropdown = document.querySelector("#profileDropdown");
 
-  if (!menu || !icon || !dropdown) return;
+  if (!profileIcon || !dropdown) return;
 
-  // If user clicks the profile image → toggle dropdown
-  if (icon.contains(e.target)) {
-    menu.classList.toggle("open");
+  // If user clicks the profile icon/image → toggle dropdown
+  if (profileIcon.contains(e.target)) {
+    e.stopPropagation();
+    const isVisible = dropdown.style.display === 'block';
+    dropdown.style.display = isVisible ? 'none' : 'block';
     return;
   }
 
   // If user clicks outside → close dropdown
-  if (!menu.contains(e.target)) {
-    menu.classList.remove("open");
+  if (!dropdown.contains(e.target)) {
+    dropdown.style.display = 'none';
   }
 });
 
-/* === GLOBAL NAVBAR LOGOUT HANDLER === */
+/* === FETCH USER INFO AND UPDATE DROPDOWN === */
+async function updateProfileDropdown() {
+  try {
+    const response = await fetch("/getUserInfo");
+    const userData = await response.json();
+
+    if (userData.loggedIn) {
+      const usernameEl = document.getElementById("dropdownUsername");
+      const emailEl = document.getElementById("dropdownEmail");
+
+      if (usernameEl) usernameEl.textContent = userData.username || 'User';
+      if (emailEl) emailEl.textContent = userData.email || '';
+    }
+  } catch (err) {
+    console.error("Failed to fetch user info:", err);
+  }
+}
+
+// Call after navbar loads
+setTimeout(updateProfileDropdown, 100);
+
+/* === GLOBAL LOGOUT HANDLER === */
 document.addEventListener("click", async (e) => {
   const btn = e.target.closest("#logoutBtn");
   if (!btn) return;

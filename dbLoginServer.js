@@ -147,7 +147,7 @@ app.get("/checkSession", (req, res) => {
 // Get user info for dashboard/profile menu
 app.get("/getUserInfo", (req, res) => {
   if (!req.session.user) {
-    res.json({ loggedIn: false });
+    return res.json({ loggedIn: false });
   }
   res.json({
     loggedIn: true,
@@ -211,6 +211,118 @@ app.get("/dashboard.html", (req, res) => {
     return res.redirect("/login.html");
   }
   res.sendFile(path.join(__dirname, "dashboard.html"));
+});
+
+// Portfolio Builder Routes
+app.get("/create-portfolio", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/login.html");
+  }
+  res.sendFile(path.join(__dirname, "create-portfolio.html"));
+});
+
+// Save portfolio data
+app.post("/api/save-portfolio", (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Not logged in" });
+  }
+
+  const userId = req.session.user.id;
+  const portfolioData = req.body;
+
+  // Check if user already has a portfolio
+  db.query(
+    "SELECT id FROM portfolios WHERE user_id = ?",
+    [userId],
+    (err, results) => {
+      if (err) {
+        console.error("Database error:", err);
+        return res.status(500).json({ error: "Database error" });
+      }
+
+      const portfolioJson = JSON.stringify(portfolioData);
+
+      if (results.length > 0) {
+        // Update existing portfolio
+        db.query(
+          "UPDATE portfolios SET template = ?, components = ?, updated_at = NOW() WHERE user_id = ?",
+          [portfolioData.template, portfolioJson, userId],
+          (err) => {
+            if (err) {
+              console.error("Error updating portfolio:", err);
+              return res.status(500).json({ error: "Failed to save portfolio" });
+            }
+            res.json({ success: true, message: "Portfolio updated successfully" });
+          }
+        );
+      } else {
+        // Insert new portfolio
+        db.query(
+          "INSERT INTO portfolios (user_id, template, components, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())",
+          [userId, portfolioData.template, portfolioJson],
+          (err) => {
+            if (err) {
+              console.error("Error creating portfolio:", err);
+              return res.status(500).json({ error: "Failed to save portfolio" });
+            }
+            res.json({ success: true, message: "Portfolio created successfully" });
+          }
+        );
+      }
+    }
+  );
+});
+
+// Get user's portfolio data
+app.get("/api/get-portfolio", (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Not logged in" });
+  }
+
+  const userId = req.session.user.id;
+
+  db.query(
+    "SELECT template, components FROM portfolios WHERE user_id = ?",
+    [userId],
+    (err, results) => {
+      if (err) {
+        console.error("Database error:", err);
+        return res.status(500).json({ error: "Database error" });
+      }
+
+      if (results.length === 0) {
+        return res.json({ hasPortfolio: false });
+      }
+
+      const portfolio = results[0];
+      res.json({
+        hasPortfolio: true,
+        template: portfolio.template,
+        components: JSON.parse(portfolio.components)
+      });
+    }
+  );
+});
+
+// Delete user's portfolio
+app.delete("/api/delete-portfolio", (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Not logged in" });
+  }
+
+  const userId = req.session.user.id;
+
+  db.query(
+    "DELETE FROM portfolios WHERE user_id = ?",
+    [userId],
+    (err) => {
+      if (err) {
+        console.error("Error deleting portfolio:", err);
+        return res.status(500).json({ error: "Failed to delete portfolio" });
+      }
+      res.json({ success: true, message: "Portfolio deleted successfully" });
+    }
+  );
 });
 
 app.listen(port, () => {

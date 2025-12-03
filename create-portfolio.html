@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Portfolio - Folio Builder</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="assets/placeholder-icon.jpg" />
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- Portfolio Builder CSS -->
+    <link rel="stylesheet" href="portfolio-builder.css" />
+
+    <!-- Material Symbols (icons) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Override portfolio builder to work with dashboard layout */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .portfolio-builder-wrapper {
+            margin-left: 252px;
+            padding-top: 56px;
+        }
+
+        .template-selector {
+            margin-left: 252px;
+            padding-top: 56px;
+            min-height: calc(100vh - 56px);
+        }
+
+        .portfolio-builder {
+            margin-left: 0;
+            padding-top: 0;
+        }
+
+        .builder-header {
+            position: sticky;
+            top: 56px;
+            z-index: 15;
+        }
+
+        /* Adjust sidebar to work with nav */
+        .sidebar {
+            top: 56px;
+        }
+
+        /* Hide navbar when in builder mode */
+        body.builder-mode nav {
+            display: none;
+        }
+
+        body.builder-mode .sidebar {
+            top: 0;
+        }
+
+        body.builder-mode .portfolio-builder-wrapper {
+            padding-top: 0;
+        }
+
+        body.builder-mode .template-selector {
+            padding-top: 0;
+        }
+
+        body.builder-mode .builder-header {
+            top: 0;
+        }
+    </style>
+</head>
+
+<body data-require-auth>
+    <!-- Navbar gets injected here from navbar.html -->
+    <div id="navbar"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar"
+        style="position: fixed; top: 56px; left: 0; bottom: 0; width: 252px; background: #fff; border-right: 1px solid #e6e8ee; padding: 12px; overflow: auto; z-index: 10;">
+        <div class="quick"
+            style="border: 1px dashed #e6e8ee; background: #fafbff; border-radius: 12px; padding: 10px; margin-bottom: 10px;">
+            <div class="group-label" style="font-size: .78rem; color: #6b7280; margin: 10px 8px 6px;">Quick Actions
+            </div>
+            <button class="btn" onclick="window.location.href='create-portfolio.html'"
+                style="display: inline-flex; align-items: center; gap: 6px; width: 100%; padding: 10px; border: none; border-radius: 8px; background: #0f62fe; color: white; cursor: pointer;">
+                <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">add</span>
+                <span>Create Portfolio</span>
+            </button>
+        </div>
+
+        <div class="group-label" style="font-size: .78rem; color: #6b7280; margin: 10px 8px 6px;">Workspace</div>
+
+        <a class="item" href="dashboard.html#setup"
+            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none;">
+            <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">tune</span>
+            <span class="text">Setup</span>
+        </a>
+
+        <a class="item active" href="create-portfolio.html"
+            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none; background: #f4f7ff;">
+            <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">work</span>
+            <span class="text">Portfolio</span>
+        </a>
+
+        <a class="item" href="dashboard.html#applications"
+            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none;">
+            <span class="icon"
+                style="font-family: 'Material Symbols Outlined'; font-size: 20px;">assignment_turned_in</span>
+            <span class="text">Job Applications</span>
+        </a>
+
+        <a class="item" href="dashboard.html#analytics"
+            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none;">
+            <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">insights</span>
+            <span class="text">Analytics</span>
+        </a>
+
+        <div class="group-label" style="font-size: .78rem; color: #6b7280; margin: 10px 8px 6px;">Other</div>
+
+        <a class="item" href="dashboard.html#inbox"
+            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none;">
+            <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">inbox</span>
+            <span class="text">Inbox</span>
+        </a>
+
+        <a class="item" href="dashboard.html#settings"
+            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none;">
+            <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">settings</span>
+            <span class="text">Settings</span>
+        </a>
+
+        <a class="item" href="dashboard.html#help"
+            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none;">
+            <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">help</span>
+            <span class="text">Help</span>
+        </a>
+
+        <div style="height:8px"></div>
+    </aside>
+
+    <!-- Template Selector View -->
+    <div id="templateSelector" class="template-selector">
+        <div class="template-selector-container">
+            <div class="template-selector-header">
+                <h1>Create Your Portfolio</h1>
+                <p>Choose a template to get started. You can customize everything later.</p>
+            </div>
+
+            <div class="template-grid">
+                <!-- Minimal Template -->
+                <button class="template-card" data-template="minimal">
+                    <div class="template-icon-wrapper">
+                        <i data-lucide="layout" class="template-icon"></i>
+                    </div>
+                    <h2>Minimal</h2>
+                    <p class="template-description">Clean, professional design with focus on content</p>
+
+                    <div class="template-preview">
+                        <p class="template-preview-label">Color Palette</p>
+                        <div class="color-palette">
+                            <div class="color-swatch" style="background-color: #ffffff; border: 1px solid #e5e7eb;">
+                            </div>
+                            <div class="color-swatch" style="background-color: #111827;"></div>
+                            <div class="color-swatch" style="background-color: #f3f4f6;"></div>
+                        </div>
+                        <p class="template-preview-label">Style Features</p>
+                        <p class="template-preview-text">Simple typography, generous whitespace, monochrome palette</p>
+                    </div>
+
+                    <div class="template-cta">
+                        <span>Select Template</span>
+                        <i data-lucide="chevron-right" class="cta-icon"></i>
+                    </div>
+                </button>
+
+                <!-- Modern Template -->
+                <button class="template-card" data-template="modern">
+                    <div class="template-icon-wrapper">
+                        <i data-lucide="sparkles" class="template-icon"></i>
+                    </div>
+                    <h2>Modern</h2>
+                    <p class="template-description">Bold gradients and contemporary aesthetics</p>
+
+                    <div class="template-preview">
+                        <p class="template-preview-label">Color Palette</p>
+                        <div class="color-palette">
+                            <div class="color-swatch" style="background-color: #2563eb;"></div>
+                            <div class="color-swatch" style="background-color: #9333ea;"></div>
+                            <div class="color-swatch" style="background-color: #ec4899;"></div>
+                        </div>
+                        <p class="template-preview-label">Style Features</p>
+                        <p class="template-preview-text">Vibrant colors, smooth transitions, card-based layout</p>
+                    </div>
+
+                    <div class="template-cta">
+                        <span>Select Template</span>
+                        <i data-lucide="chevron-right" class="cta-icon"></i>
+                    </div>
+                </button>
+
+                <!-- Creative Template -->
+                <button class="template-card" data-template="creative">
+                    <div class="template-icon-wrapper">
+                        <i data-lucide="palette" class="template-icon"></i>
+                    </div>
+                    <h2>Creative</h2>
+                    <p class="template-description">Unique layouts for designers and artists</p>
+
+                    <div class="template-preview">
+                        <p class="template-preview-label">Color Palette</p>
+                        <div class="color-palette">
+                            <div class="color-swatch" style="background-color: #f59e0b;"></div>
+                            <div class="color-swatch" style="background-color: #14b8a6;"></div>
+                            <div class="color-swatch" style="background-color: #f43f5e;"></div>
+                        </div>
+                        <p class="template-preview-label">Style Features</p>
+                        <p class="template-preview-text">Asymmetric grids, playful typography, bold imagery</p>
+                    </div>
+
+                    <div class="template-cta">
+                        <span>Select Template</span>
+                        <i data-lucide="chevron-right" class="cta-icon"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio Builder View -->
+    <div id="portfolioBuilder" class="portfolio-builder" style="display: none;">
+        <!-- Header -->
+        <header class="builder-header">
+            <div class="builder-header-left">
+                <button id="backButton" class="btn-back">
+                    <i data-lucide="arrow-left"></i>
+                    <span>Back</span>
+                </button>
+                <div class="header-divider"></div>
+                <h1>Portfolio Builder</h1>
+                <span id="templateLabel" class="template-label"></span>
+            </div>
+
+            <div class="builder-header-right">
+                <button id="addComponentButton" class="btn-primary">
+                    <i data-lucide="plus"></i>
+                    <span>Add Component</span>
+                </button>
+
+                <button id="previewToggle" class="btn-secondary">
+                    <i data-lucide="eye" id="previewIcon"></i>
+                    <span id="previewText">Preview</span>
+                </button>
+
+                <button id="saveButton" class="btn-success">
+                    <i data-lucide="save"></i>
+                    <span>Save</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="builder-content">
+            <!-- Component Palette Sidebar (Left) -->
+            <aside id="componentPalette" class="component-palette" style="display: none;">
+                <div class="palette-header">
+                    <div>
+                        <h2>Add Components</h2>
+                        <p>Click to add components to your portfolio</p>
+                    </div>
+                    <button id="closePalette" class="btn-icon">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+
+                <div class="palette-content">
+                    <!-- Component items will be inserted here by JS -->
+                </div>
+            </aside>
+
+            <!-- Preview/Edit Area (Center) -->
+            <main class="builder-preview">
+                <div id="portfolioPreview" class="portfolio-preview-content">
+                    <!-- Portfolio components will be rendered here -->
+                </div>
+            </main>
+
+            <!-- Component Editor Sidebar (Right) -->
+            <aside id="componentEditor" class="component-editor" style="display: none;">
+                <div class="editor-header">
+                    <h2>Edit Component</h2>
+                    <button id="closeEditor" class="btn-icon">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+
+                <div class="editor-content">
+                    <!-- Editor fields will be inserted here by JS -->
+                </div>
+
+                <div class="editor-footer">
+                    <button id="deleteComponent" class="btn-danger">
+                        <i data-lucide="trash-2"></i>
+                        <span>Delete Component</span>
+                    </button>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Portfolio Builder JavaScript -->
+    <script src="portfolio-builder.js"></script>
+
+    <!-- Navbar Authentication Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
