@@ -49,12 +49,15 @@
     }
     .search input{ border:0; outline:0; width:100%; font:inherit; }
     .top-actions { display:flex; gap:8px; }
-    .btn {
-      display:inline-flex; align-items:center; gap:8px; padding:8px 12px;
-      border:1px solid var(--border); border-radius:10px; background:#fff; cursor:pointer; font-weight:600;
+    .topbar .btn,
+    .sidebar .btn {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
     }
+
     .btn-primary { background:var(--brand); color:var(--brand-ink); border-color:var(--brand); }
-    /* Improve icons: make sure the variable axes are set */
+    /* Improve icons */
     .icon {
       font-family: "Material Symbols Outlined";
       font-weight: normal;
@@ -180,12 +183,14 @@
   <header class="topbar">
     <button class="btn menu-btn" id="sidebarToggle"><span class="icon">menu</span>menu</button>
     <div class="brand">
-       <a href="index.html" class="nav-left">
+  <a href="index.html" class="nav-left">
     <img src="assets/placeholder-icon.jpg" alt="Portfolio Logo" class="logo-img">
-      <span>Folio Builder</span>
-      <span class="muted">|</span>
-      <a class="muted" href="#">My Site</a>
-    </div>
+    <span>Folio Builder</span>
+  </a>
+  <span class="muted">|</span>
+  <a class="muted" href="#">My Site</a>
+</div>
+
     <div class="grow"></div>
     <label class="search">
       <span class="icon">search</span>
@@ -252,6 +257,7 @@
 <!-- Panels (place these once, outside the sidebar but inside the same page) -->
 <div id="portfolioPanel" class="panel" hidden>
   <div class="panel-header">Portfolio</div>
+  <a class="panel-link" href="my-portfolios.html">My Portfolios</a>
   <a class="panel-link" href="#portfolio-overview">Overview</a>
   <a class="panel-link" href="#portfolio-templates">Templates</a>
   <a class="panel-link" href="#portfolio-resumes">Resumes</a>
