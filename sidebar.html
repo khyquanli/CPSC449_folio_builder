@@ -1,7 +1,10 @@
 <aside class="sidebar" id="sidebar">
+  <button class="sidebar-toggle" id="sidebarToggle" title="Toggle sidebar">
+    <span class="icon">chevron_left</span>
+  </button>
   <div class="quick">
     <div class="group-label">Quick Actions</div>
-    <button class="btn">
+    <button class="btn" onclick="window.location.href='create-portfolio.html'">
       <span class="icon">add</span>
       Create Portfolio
     </button>
@@ -9,12 +12,12 @@
 
   <div class="group-label">Workspace</div>
 
-  <a class="item" href="dashboard.html#setup" data-pop="pop-setup">
+  <a class="item" href="dashboard.html#setup">
     <span class="icon">tune</span>
     <span class="text">Setup</span>
   </a>
 
-  <a class="item" href="my-portfolios.html" data-panel="portfolioPanel">
+  <a class="item" href="create-portfolio.html" data-panel="portfolioPanel">
     <span class="icon">work</span>
     <span class="text">Portfolio</span>
   </a>
@@ -48,3 +51,26 @@
 
   <div style="height:8px"></div>
 </aside>
+
+<!-- Panels (mini menus for sidebar items) -->
+<div id="portfolioPanel" class="panel" hidden>
+  <div class="panel-header">Portfolio</div>
+  <a class="panel-link" href="my-portfolios.html">My Portfolios</a>
+  <a class="panel-link" href="#portfolio-overview">Overview</a>
+  <a class="panel-link" href="#portfolio-templates">Templates</a>
+  <a class="panel-link" href="#portfolio-resumes">Resumes</a>
+</div>
+
+<div id="applicationsPanel" class="panel" hidden>
+  <div class="panel-header">Job Applications</div>
+  <a class="panel-link" href="#apps-tracker">Tracker</a>
+  <a class="panel-link" href="#apps-resumes">Resumes</a>
+  <a class="panel-link" href="#apps-calendar">Calendar</a>
+</div>
+
+<div id="analyticsPanel" class="panel" hidden>
+  <div class="panel-header">Analytics</div>
+  <a class="panel-link" href="#analytics-overview">Overview</a>
+  <a class="panel-link" href="#analytics-traffic">Traffic</a>
+  <a class="panel-link" href="#analytics-conversions">Conversions</a>
+</div>

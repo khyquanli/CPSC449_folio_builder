@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,12 +10,14 @@
   <link rel="stylesheet" href="styles.css?v=7" />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
 </head>
-<body class="pf-body">
+
+<body class="pf-body" data-require-auth>
   <!-- Top navbar (same as the rest of the site) -->
   <div id="navbar"></div>
 
-    <!-- App shell: shared sidebar + main content -->
+  <!-- App shell: shared sidebar + main content -->
   <div class="shell">
     <!-- Shared sidebar will be injected here by script.js -->
     <div id="sidebarHost"></div>
@@ -93,4 +96,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>

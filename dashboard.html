@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -10,12 +11,13 @@
   <!-- Material Symbols (icons) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=7">
 
   <style>
     /* ===============  Design tokens  =============== */
-    :root{
+    :root {
       --bg: #f4f6fb;
       --surface: #ffffff;
       --ink: #111319;
@@ -24,40 +26,28 @@
       --brand: #0f62fe;
       --brand-ink: #fff;
       --radius: 14px;
-      --shadow: 0 1px 2px rgba(17,19,25,0.05), 0 12px 30px rgba(17,19,25,0.06);
-    }
-    * { box-sizing: border-box; }
-    html,body { margin:0; padding:0; height:100%; background:var(--bg); color:var(--ink);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; }
-
-    a { color: inherit; text-decoration: none; }
-
-    /* ===============  Top bar  =============== */
-    .topbar {
-      position: sticky; top:0; z-index: 20;
-      height:56px; background:var(--surface);
-      border-bottom:1px solid var(--border);
-      display:flex; align-items:center; gap:12px; padding:0 12px;
-    }
-    .brand { display:flex; align-items:center; gap:10px; font-weight:700; }
-    .brand .logo { width:28px; height:28px; border-radius:6px; background:var(--brand); display:inline-flex;
-      align-items:center; justify-content:center; color:var(--brand-ink); font-size:14px; }
-    .topbar .grow { flex:1; }
-    .search {
-      display:flex; align-items:center; gap:8px; padding:6px 10px; background:#fff;
-      border:1px solid var(--border); border-radius:10px; max-width:540px; width:100%;
-    }
-    .search input{ border:0; outline:0; width:100%; font:inherit; }
-    .top-actions { display:flex; gap:8px; }
-    .topbar .btn,
-    .sidebar .btn {
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
+      --shadow: 0 1px 2px rgba(17, 19, 25, 0.05), 0 12px 30px rgba(17, 19, 25, 0.06);
     }
 
-    .btn-primary { background:var(--brand); color:var(--brand-ink); border-color:var(--brand); }
-    /* Improve icons */
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Icon styling */
     .icon {
       font-family: "Material Symbols Outlined";
       font-weight: normal;
@@ -70,213 +60,215 @@
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     }
 
-    .menu-btn { display:inline-flex; align-items:center; gap:6px; }
-
     /* ===============  Layout (sidebar + main)  =============== */
-    .shell { position:relative; }
-    .sidebar {
-      position: fixed; top:56px; left:0; bottom:0; width:252px; background:#fff;
-      border-right:1px solid var(--border); padding:12px; overflow:auto; z-index:10;
+    .shell {
+      position: relative;
     }
-    .sidebar.is-collapsed { width:72px; }
-    .sidebar .group-label { font-size:.78rem; color:var(--muted); margin:10px 8px 6px; }
-    .sidebar .item {
-      display:flex; align-items:center; gap:12px; padding:10px 10px; border-radius:10px; color:#2b2f37;
-    }
-    .sidebar .item:hover { background:#f4f7ff; }
-    .sidebar .item .text { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .sidebar.is-collapsed .text { display:none; }
-    .quick {
-      border:1px dashed var(--border); background:#fafbff; border-radius:12px; padding:10px; margin-bottom:10px;
-    }
-    .quick .btn { width:100%; justify-content:center; }
 
     .main {
-      margin:16px; margin-left: calc(252px + 16px);
+      margin: 16px;
+      margin-left: calc(252px + 16px);
     }
-    .sidebar.is-collapsed ~ .main { margin-left: calc(72px + 16px); }
+
+    .sidebar.is-collapsed~.main {
+      margin-left: calc(72px + 16px);
+    }
 
     /* ===============  Cards / sections  =============== */
     .card {
-      background:#fff; border:1px solid var(--border); border-radius:var(--radius); box-shadow: var(--shadow);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
     }
-    .pad { padding:16px; }
-    .title { font-size:clamp(22px, 3.2vw, 32px); margin:0 0 4px; }
-    .muted { color:var(--muted); }
-    .row { display:flex; align-items:center; gap:10px; }
-    .sp { height:12px; }
+
+    .pad {
+      padding: 16px;
+    }
+
+    .title {
+      font-size: clamp(22px, 3.2vw, 32px);
+      margin: 0 0 4px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sp {
+      height: 12px;
+    }
 
     /* ===============  Checklist  =============== */
     .checklist-head {
-      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
     }
-    .progress {
-      display:flex; align-items:center; gap:8px; font-weight:600;
-    }
-    .meter {
-      height:8px; width:180px; background:#eef0f6; border-radius:999px; overflow:hidden; border:1px solid var(--border);
-    }
-    .meter > i { display:block; height:100%; width:0%; background:var(--brand); }
 
-    .tasks { display:grid; gap:8px; }
-    .task {
-      display:grid; grid-template-columns: 28px 1fr auto; align-items:center; gap:8px;
-      border:1px solid var(--border); border-radius:12px; padding:10px 12px; background:#fff;
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
     }
-    .task .action { display:flex; gap:8px; }
-    .chip { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px;
-      border:1px solid var(--border); background:#fff; font-weight:600; }
-    .chip.primary { background:var(--brand); color:#fff; border-color:var(--brand); }
+
+    .meter {
+      height: 8px;
+      width: 180px;
+      background: #eef0f6;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .meter>i {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: var(--brand);
+    }
+
+    .tasks {
+      display: grid;
+      gap: 8px;
+    }
+
+    .task {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #fff;
+    }
+
+    .task .action {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-weight: 600;
+    }
+
+    .chip.primary {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
 
     /* === Left sidebar pop menus === */
-.side-pop {
-  position: fixed;
-  left: 252px;                 
-  min-width: 280px;
-  max-width: 340px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-  padding: 10px;
-  z-index: 30;
-  display: none;             
-}
-.sidebar.is-collapsed + .side-pop,
-.sidebar.is-collapsed ~ .side-pop { left: 72px; }
+    .side-pop {
+      position: fixed;
+      left: 252px;
+      min-width: 280px;
+      max-width: 340px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 10px;
+      z-index: 30;
+      display: none;
+    }
 
-.side-pop .title {
-  font-size: .9rem;
-  font-weight: 700;
-  margin: 6px 6px 8px;
-  color: var(--ink);
-}
-.side-pop .item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px; border-radius: 10px; cursor: pointer;
-}
-.side-pop .item:hover { background: #f5f7ff; }
-.side-pop .item .icon {
-  font-family: "Material Symbols Outlined"; font-size: 20px;
-}
-.side-pop .sep { border-top: 1px solid var(--border); margin: 8px 6px; }
+    .sidebar.is-collapsed+.side-pop,
+    .sidebar.is-collapsed~.side-pop {
+      left: 72px;
+    }
 
-.side-pop::before{
-  content:"";
-  position:absolute; top:12px; left:-6px;
-  width: 12px; height: 12px; rotate: 45deg;
-  background:#fff; border-left:1px solid var(--border); border-top:1px solid var(--border);
-}
+    .side-pop .title {
+      font-size: .9rem;
+      font-weight: 700;
+      margin: 6px 6px 8px;
+      color: var(--ink);
+    }
+
+    .side-pop .item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .side-pop .item:hover {
+      background: #f5f7ff;
+    }
+
+    .side-pop .item .icon {
+      font-family: "Material Symbols Outlined";
+      font-size: 20px;
+    }
+
+    .side-pop .sep {
+      border-top: 1px solid var(--border);
+      margin: 8px 6px;
+    }
+
+    .side-pop::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: -6px;
+      width: 12px;
+      height: 12px;
+      rotate: 45deg;
+      background: #fff;
+      border-left: 1px solid var(--border);
+      border-top: 1px solid var(--border);
+    }
 
 
     /* ===============  Responsive  =============== */
-    @media (max-width: 980px){
-      .sidebar { transform: translateX(-100%); transition: transform .2s ease; width: 272px; }
-      .sidebar.is-open { transform: translateX(0); }
-      .main { margin-left:16px; }
-      .search { display:none; }
+    @media (max-width: 980px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform .2s ease;
+        width: 272px;
+      }
+
+      .sidebar.is-open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 16px;
+      }
+
+      .search {
+        display: none;
+      }
     }
   </style>
 </head>
-<body>
-  <!-- Top bar -->
-  <header class="topbar">
-    <button class="btn menu-btn" id="sidebarToggle"><span class="icon">menu</span>menu</button>
-    <div class="brand">
-  <a href="index.html" class="nav-left">
-    <img src="assets/placeholder-icon.jpg" alt="Portfolio Logo" class="logo-img">
-    <span>Folio Builder</span>
-  </a>
-  <span class="muted">|</span>
-  <a class="muted" href="#">My Site</a>
-</div>
 
-    <div class="grow"></div>
-    <label class="search">
-      <span class="icon">search</span>
-      <input placeholder="Search for tools, apps, help & more…" />
-    </label>
-    <div class="top-actions">
-      <button class="icon-btn" aria-label="Inbox" data-menu="inboxMenu">
-        <span class="icon">inbox</span>
-        <span class="badge" id="inboxBadge">3</span>
-      </button>
-
-      <button class="icon-btn" aria-label="Notifications" data-menu="notifMenu">
-        <span class="icon">notifications</span>
-        <span class="badge" id="notifBadge">2</span>
-      </button>
-
-      <button class="icon-btn" aria-label="Account" data-menu="acctMenu" id="profileIconBtn">
-        <span class="icon">account_circle</span>
-      </button>
-
-      <div class="profile-dropdown" id="profileDropdown">
-        <div class="profile-info">
-          <div class="username" id="dropdownUsername"><b>Username</b></div>
-          <div class="email" id="dropdownEmail">Email</div>
-        </div>
-        <hr>
-        <button class="dropdown-btn" id="accountSettingsBtn">Account Settings</button>
-        <button class="dropdown-btn logout" id="logoutBtn">Log Out</button>
-      </div>
-    </div>
-  </header>
+<body data-require-auth>
+  <!-- Navbar gets injected here from navbar.html -->
+  <div id="navbar"></div>
 
   <div class="shell">
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-  <div class="quick">
-    <div class="group-label">Quick Actions</div>
-    <button class="btn"><span class="icon">add</span>Create Portfolio</button>
-  </div>
-
-  <div class="group-label">Workspace</div>
-  <a class="item" href="#setup"         data-pop="pop-setup"><span class="icon">tune</span><span class="text">Setup</span></a>
-<!-- Sidebar items (examples) -->
-<a class="item" href="#portfolio" data-panel="portfolioPanel">
-  <span class="icon">work</span><span class="text">Portfolio</span>
-</a>
-<a class="item" href="#applications" data-panel="applicationsPanel">
-  <span class="icon">assignment_turned_in</span><span class="text">Job Applications</span>
-</a>
-<a class="item" href="#analytics" data-panel="analyticsPanel">
-  <span class="icon">insights</span><span class="text">Analytics</span>
-</a>
-
-  <div class="nav-sep"></div>
-
-  <div class="group-label">Other</div>
-  <a class="item" href="#inbox"><span class="icon">inbox</span><span class="text">Inbox</span></a>
-  <a class="item" href="#settings"><span class="icon">settings</span><span class="text">Settings</span></a>
-  <a class="item" href="#help"><span class="icon">help</span><span class="text">Help</span></a>
-
-  <div style="height:8px"></div>
-</aside>
-
-<!-- Panels (place these once, outside the sidebar but inside the same page) -->
-<div id="portfolioPanel" class="panel" hidden>
-  <div class="panel-header">Portfolio</div>
-  <a class="panel-link" href="my-portfolios.html">My Portfolios</a>
-  <a class="panel-link" href="#portfolio-overview">Overview</a>
-  <a class="panel-link" href="#portfolio-templates">Templates</a>
-  <a class="panel-link" href="#portfolio-resumes">Resumes</a>
-</div>
-
-<div id="applicationsPanel" class="panel" hidden>
-  <div class="panel-header">Job Applications</div>
-  <a class="panel-link" href="#apps-tracker">Tracker</a>
-  <a class="panel-link" href="#apps-resumes">Resumes</a>
-  <a class="panel-link" href="#apps-calendar">Calendar</a>
-</div>
-
-<div id="analyticsPanel" class="panel" hidden>
-  <div class="panel-header">Analytics</div>
-  <a class="panel-link" href="#analytics-overview">Overview</a>
-  <a class="panel-link" href="#analytics-traffic">Traffic</a>
-  <a class="panel-link" href="#analytics-conversions">Conversions</a>
-</div>
-
+    <div id="sidebarHost"></div>
 
     <!-- Main -->
     <main class="main" id="main">
@@ -302,25 +294,13 @@
   </div>
 
   <script>
-    // ----- Sidebar toggle (desktop collapse, mobile slide-in) -----
-    const sidebar = document.getElementById('sidebar');
-    const toggle  = document.getElementById('sidebarToggle');
-    function toggleSidebar(){
-      if (window.matchMedia('(max-width: 980px)').matches){
-        sidebar.classList.toggle('is-open');
-      } else {
-        sidebar.classList.toggle('is-collapsed');
-      }
-    }
-    toggle.addEventListener('click', toggleSidebar);
-
     // ----- Checklist model -----
     const steps = [
-      { id:'domain', label:'Connect a custom domain', cta:'Let’s Go' },
-      { id:'template', label:'Choose a template', btn:'', cta:'See Presets',icon:'check_circle' },
-      { id:'project', label:'Add a project to your portfolio', cta:'Add Project' },
-      { id:'resume', label:'Upload your resume', cta:'Upload Resume' },
-      { id:'design', label:'Design your website', cta:'Design Site' },
+      { id: 'domain', label: 'Connect a custom domain', cta: 'Let’s Go' },
+      { id: 'template', label: 'Choose a template', btn: '', cta: 'See Presets', icon: 'check_circle' },
+      { id: 'project', label: 'Add a project to your portfolio', cta: 'Add Project' },
+      { id: 'resume', label: 'Upload your resume', cta: 'Upload Resume' },
+      { id: 'design', label: 'Design your website', cta: 'Design Site' },
     ];
 
     // Holds the user's checklist booleans received from server
@@ -332,11 +312,11 @@
       design: false
     };
 
-    const tasksEl   = document.getElementById('tasks');
-    const meterBar  = document.getElementById('meterBar');
-    const countLbl  = document.getElementById('countLabel');   
+    const tasksEl = document.getElementById('tasks');
+    const meterBar = document.getElementById('meterBar');
+    const countLbl = document.getElementById('countLabel');
 
-    function renderChecklist(){
+    function renderChecklist() {
       tasksEl.innerHTML = '';
       let complete = 0;
 
@@ -369,7 +349,7 @@
       const id = e.target.getAttribute('data-id');
       userChecklist[id] = e.target.checked == true;
       renderChecklist();
-      saveChecklist(); 
+      saveChecklist();
     });
 
     renderChecklist();
@@ -379,12 +359,12 @@
         .then(res => res.json())
         .then(data => {
           userChecklist = data;
-          render();
+          renderChecklist();
         })
         .catch(err => console.error("Checklist load error:", err));
     }
 
-    // Profile dropdown toggle
+    // Profile dropdown toggle (dashboard-specific)
     const profileBtn = document.getElementById("profileIconBtn");
     const profileDropdown = document.getElementById("profileDropdown");
 
@@ -401,17 +381,17 @@
         }
       });
     }
-    
+
     async function init() {
       try {
         const userInfo = await fetch("/getUserInfo");
         const userData = await userInfo.json();
 
         if (!userData.loggedIn) {
-            // If not logged in, redirect to login page
-            window.location.href = "/login.html";
-            return;            
-        } 
+          // If not logged in, redirect to login page
+          window.location.href = "/login.html";
+          return;
+        }
 
         // Display user info on the dashboard profile dropdown
         document.getElementById("dropdownUsername").textContent = userData.username;
@@ -421,7 +401,7 @@
         const checklistResp = await fetch('/getChecklist');
         if (!checklistResp.ok) throw new Error('Failed to load checklist');
         const checklistJson = await checklistResp.json();
-        
+
         userChecklist = {
           domain: !!checklistJson.domain,
           template: !!checklistJson.template,
@@ -432,10 +412,10 @@
 
         renderChecklist();
 
-      } catch(err) {
+      } catch (err) {
         console.error("Error fetching user info:", err);
-      }      
-    }   
+      }
+    }
 
     // Save checklist to server (sends complete checklist object)
     async function saveChecklist() {
@@ -444,7 +424,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(userChecklist)
-        });       
+        });
       } catch (err) {
         console.error("Failed saving checklist:", err);
       }
@@ -455,4 +435,5 @@
   </script>
   <script src="script.js"></script>
 </body>
+
 </html>

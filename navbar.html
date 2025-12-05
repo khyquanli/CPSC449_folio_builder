@@ -12,8 +12,9 @@
         <div class="dropdown">
             <button>Explore<span class="material-symbols-outlined">keyboard_arrow_down</span></button>
             <div class="dropdown-content">
+                <a href="create-portfolio">Create Portfolio</a>
                 <a href="my-portfolios.html">My Portfolios</a>
-                <a href="#">Portolio Templates</a>
+                <a href="#">Portfolio Templates</a>
                 <a href="#">Job Tracker</a>
             </div>
         </div>
@@ -36,9 +37,14 @@
         </div>
         <!-- Logged-in profile dropdown -->
         <div id="loggedInNav" class="profile-menu" style="display: none;">
-            <img src="assets/default-headshot.jpg" class="profile-icon">
+            <img src="assets/default-headshot.jpg" class="profile-icon" id="profileIconBtn">
 
-            <div class="profile-dropdown">
+            <div class="profile-dropdown" id="profileDropdown" style="display: none;">
+                <div class="profile-info">
+                    <div class="username" id="dropdownUsername"><b>Username</b></div>
+                    <div class="email" id="dropdownEmail">Email</div>
+                </div>
+                <hr>
                 <button class="dropdown-btn" id="accountSettingsBtn">Account Settings</button>
                 <button class="dropdown-btn logout" id="logoutBtn">Log Out</button>
             </div>
