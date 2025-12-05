@@ -2,7 +2,7 @@
    PORTFOLIO BUILDER CSS - Optimized
    ============================================================================ */
 
-/* CSS Variables for consistent theming and reduced repetition */
+/* CSS Variables for consistent theming */
 :root {
     --color-primary: #6366f1;
     --color-primary-dark: #4f46e5;
@@ -344,6 +344,8 @@ body {
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+    position: relative;
+    z-index: 30;
 }
 
 .palette-header {
@@ -940,6 +942,8 @@ body {
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+    position: relative;
+    z-index: 30;
 }
 
 .editor-header {
@@ -993,8 +997,6 @@ body {
 .editor-select:focus {
     outline: none;
     border-color: var(--color-primary);
-    ring: 2px;
-    ring-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
@@ -1121,7 +1123,7 @@ body {
     .component-editor {
         position: absolute;
         height: 100%;
-        z-index: 10;
+        z-index: 60;
         box-shadow: var(--shadow-lg);
     }
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Portfolio - Folio Builder</title>
+    <title>Create Portfolio • Folio Builder</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="assets/placeholder-icon.jpg" />
@@ -24,61 +24,6 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <style>
-        /* Override portfolio builder to work with dashboard layout */
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        .portfolio-builder-wrapper {
-            margin-left: 252px;
-            padding-top: 56px;
-        }
-
-        .template-selector {
-            margin-left: 252px;
-            padding-top: 56px;
-            min-height: calc(100vh - 56px);
-        }
-
-        .portfolio-builder {
-            margin-left: 0;
-            padding-top: 0;
-        }
-
-        .builder-header {
-            position: sticky;
-            top: 56px;
-            z-index: 15;
-        }
-
-        /* Adjust sidebar to work with nav */
-        .sidebar {
-            top: 56px;
-        }
-
-        /* Hide navbar when in builder mode */
-        body.builder-mode nav {
-            display: none;
-        }
-
-        body.builder-mode .sidebar {
-            top: 0;
-        }
-
-        body.builder-mode .portfolio-builder-wrapper {
-            padding-top: 0;
-        }
-
-        body.builder-mode .template-selector {
-            padding-top: 0;
-        }
-
-        body.builder-mode .builder-header {
-            top: 0;
-        }
-    </style>
 </head>
 
 <body data-require-auth>
@@ -86,68 +31,7 @@
     <div id="navbar"></div>
 
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar"
-        style="position: fixed; top: 56px; left: 0; bottom: 0; width: 252px; background: #fff; border-right: 1px solid #e6e8ee; padding: 12px; overflow: auto; z-index: 10;">
-        <div class="quick"
-            style="border: 1px dashed #e6e8ee; background: #fafbff; border-radius: 12px; padding: 10px; margin-bottom: 10px;">
-            <div class="group-label" style="font-size: .78rem; color: #6b7280; margin: 10px 8px 6px;">Quick Actions
-            </div>
-            <button class="btn" onclick="window.location.href='create-portfolio.html'"
-                style="display: inline-flex; align-items: center; gap: 6px; width: 100%; padding: 10px; border: none; border-radius: 8px; background: #0f62fe; color: white; cursor: pointer;">
-                <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">add</span>
-                <span>Create Portfolio</span>
-            </button>
-        </div>
-
-        <div class="group-label" style="font-size: .78rem; color: #6b7280; margin: 10px 8px 6px;">Workspace</div>
-
-        <a class="item" href="dashboard.html#setup"
-            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none;">
-            <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">tune</span>
-            <span class="text">Setup</span>
-        </a>
-
-        <a class="item active" href="create-portfolio.html"
-            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none; background: #f4f7ff;">
-            <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">work</span>
-            <span class="text">Portfolio</span>
-        </a>
-
-        <a class="item" href="dashboard.html#applications"
-            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none;">
-            <span class="icon"
-                style="font-family: 'Material Symbols Outlined'; font-size: 20px;">assignment_turned_in</span>
-            <span class="text">Job Applications</span>
-        </a>
-
-        <a class="item" href="dashboard.html#analytics"
-            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none;">
-            <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">insights</span>
-            <span class="text">Analytics</span>
-        </a>
-
-        <div class="group-label" style="font-size: .78rem; color: #6b7280; margin: 10px 8px 6px;">Other</div>
-
-        <a class="item" href="dashboard.html#inbox"
-            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none;">
-            <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">inbox</span>
-            <span class="text">Inbox</span>
-        </a>
-
-        <a class="item" href="dashboard.html#settings"
-            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none;">
-            <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">settings</span>
-            <span class="text">Settings</span>
-        </a>
-
-        <a class="item" href="dashboard.html#help"
-            style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; color: #2b2f37; text-decoration: none;">
-            <span class="icon" style="font-family: 'Material Symbols Outlined'; font-size: 20px;">help</span>
-            <span class="text">Help</span>
-        </a>
-
-        <div style="height:8px"></div>
-    </aside>
+    <div id="sidebarHost"></div>
 
     <!-- Template Selector View -->
     <div id="templateSelector" class="template-selector">

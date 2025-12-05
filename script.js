@@ -61,6 +61,59 @@ fetch("sidebar.html")
     const host = document.getElementById("sidebarHost");
     if (host) {
       host.innerHTML = html;
+
+      // Highlight active sidebar item based on current page
+      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+      const sidebarItems = host.querySelectorAll('.sidebar .item');
+
+      sidebarItems.forEach(item => {
+        const itemHref = item.getAttribute('href');
+        if (itemHref) {
+          const itemPage = itemHref.split('#')[0].split('/').pop();
+          if (itemPage && itemPage === currentPage && !itemHref.includes('#')) {
+            item.classList.add('is-active');
+          }
+        }
+      });
+
+      // Setup sidebar toggle functionality
+      const toggleBtn = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+
+      if (toggleBtn && sidebar) {
+        // Function to update page layout based on sidebar state
+        const updateLayout = () => {
+          const isCollapsed = sidebar.classList.contains('is-collapsed');
+
+          // Add/remove body class for global CSS targeting
+          if (isCollapsed) {
+            document.body.classList.add('sidebar-collapsed');
+          } else {
+            document.body.classList.remove('sidebar-collapsed');
+          }
+        };
+
+        toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('is-collapsed');
+          // Save state to localStorage
+          const isCollapsed = sidebar.classList.contains('is-collapsed');
+          localStorage.setItem('sidebarCollapsed', isCollapsed);
+          // Update layout
+          updateLayout();
+        });
+
+        // Restore saved state only if explicitly set and on same page session
+        // Default to expanded state
+        const savedState = localStorage.getItem('sidebarCollapsed');
+        const isBuilderMode = document.body.classList.contains('builder-mode');
+
+        // Only restore collapsed state in builder mode
+        if (savedState === 'true' && isBuilderMode) {
+          sidebar.classList.add('is-collapsed');
+        }
+        // Update layout on initial load
+        updateLayout();
+      }
     }
   })
   .catch((err) => console.error("Error loading sidebar:", err));

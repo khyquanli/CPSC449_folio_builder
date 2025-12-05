@@ -1,6 +1,3 @@
-// Portfolio Builder - Vanilla JavaScript Implementation
-// Replicates React/TypeScript figma-create-portfolio functionality
-
 // ============================================================================
 // UTILITY CLASSES - Enhancement Features
 // ============================================================================
@@ -516,6 +513,14 @@ const PortfolioBuilder = {
 
         // Hide navbar and adjust layout
         document.body.classList.add('builder-mode');
+
+        // Auto-collapse sidebar after template selection for more workspace
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar && !sidebar.classList.contains('is-collapsed')) {
+            sidebar.classList.add('is-collapsed');
+            document.body.classList.add('sidebar-collapsed');
+            localStorage.setItem('sidebarCollapsed', 'true');
+        }
 
         // Initialize builder
         this.renderComponentPalette();
