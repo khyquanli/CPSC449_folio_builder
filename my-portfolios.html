@@ -8,8 +8,12 @@
 
   <link rel="icon" type="image/jpeg" href="assets/placeholder-icon.jpg" />
   <link rel="stylesheet" href="styles.css?v=7" />
+  <link rel="stylesheet" href="portfolio-builder.css" />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
 </head>
 
@@ -28,28 +32,32 @@
       <section class="pf-templates">
         <h1 class="pf-title">Choose a template</h1>
         <p class="pf-sub">
-          Start a new resume or portfolio from one of our presets.
+          Start a new portfolio from one of our presets.
         </p>
 
         <div class="pf-template-row">
-          <button class="pf-template-card">
-            <div class="pf-thumb blank"></div>
-            <div class="pf-template-name">Blank portfolio</div>
+          <button class="pf-template-card template-card template-card-mini" data-template="minimal">
+            <div class="template-icon-wrapper">
+              <i data-lucide="layout" class="template-icon"></i>
+            </div>
+            <h3>Minimal</h3>
+            <p class="template-description">Clean, professional design with focus on content</p>
           </button>
 
-          <button class="pf-template-card">
-            <div class="pf-thumb serif"></div>
-            <div class="pf-template-name">Resume – Serif</div>
+          <button class="pf-template-card template-card template-card-mini" data-template="modern">
+            <div class="template-icon-wrapper">
+              <i data-lucide="sparkles" class="template-icon"></i>
+            </div>
+            <h3>Modern</h3>
+            <p class="template-description">Bold gradients and contemporary aesthetics</p>
           </button>
 
-          <button class="pf-template-card">
-            <div class="pf-thumb swiss"></div>
-            <div class="pf-template-name">Resume – Swiss</div>
-          </button>
-
-          <button class="pf-template-card">
-            <div class="pf-thumb coral"></div>
-            <div class="pf-template-name">Resume – Coral</div>
+          <button class="pf-template-card template-card template-card-mini" data-template="creative">
+            <div class="template-icon-wrapper">
+              <i data-lucide="palette" class="template-icon"></i>
+            </div>
+            <h3>Creative</h3>
+            <p class="template-description">Unique layouts for designers and artists</p>
           </button>
         </div>
       </section>
@@ -57,44 +65,30 @@
       <!-- BOTTOM: Grid of existing portfolios (Drive style) -->
       <section class="pf-grid-section">
         <div class="pf-grid-header">
-          <h2>Your portfolios</h2>
-          <button class="pf-btn-primary">
-            <span class="material-symbols-outlined">add</span>
-            New portfolio
-          </button>
+          <h2>Your Portfolios</h2>
         </div>
 
-        <div class="pf-grid">
-          <!-- Example cards – later these will be populated from your DB -->
-          <article class="pf-card">
-            <div class="pf-card-thumb"></div>
-            <div class="pf-card-meta">
-              <div class="pf-card-title">Software Engineer Resume</div>
-              <div class="pf-card-sub">Last edited 3 days ago</div>
-            </div>
-          </article>
+        <div class="pf-grid" id="portfolioGrid">
+          <!-- Loading state -->
+          <div class="pf-loading">Loading your portfolios...</div>
+        </div>
 
-          <article class="pf-card">
-            <div class="pf-card-thumb"></div>
-            <div class="pf-card-meta">
-              <div class="pf-card-title">Data Analyst Portfolio</div>
-              <div class="pf-card-sub">Last edited 1 week ago</div>
-            </div>
-          </article>
-
-          <!-- "Create new" card -->
-          <article class="pf-card pf-card-new">
-            <div class="pf-card-new-inner">
-              <span class="material-symbols-outlined">add</span>
-              <span>Create new</span>
-            </div>
-          </article>
+        <!-- Empty state (hidden by default) -->
+        <div class="pf-empty-state" id="emptyState" style="display: none;">
+          <span class="material-symbols-outlined" style="font-size: 64px; color: #9ca3af;">folder_open</span>
+          <h3>No portfolios yet</h3>
+          <p>Create your first portfolio to get started</p>
+          <a href="create-portfolio.html" class="pf-btn-primary">
+            <span class="material-symbols-outlined">add</span>
+            Create Portfolio
+          </a>
         </div>
       </section>
     </main>
   </div>
 
   <script src="script.js"></script>
+  <script src="my-portfolios.js"></script>
 </body>
 
 </html>

@@ -460,6 +460,80 @@ const PortfolioBuilder = {
         this.initializeLucideIcons();
         DragDropManager.init();
         ScrollAnimator.init();
+
+        // Store referrer for back navigation
+        const referrer = document.referrer;
+        if (referrer && referrer.includes(window.location.origin)) {
+            sessionStorage.setItem('portfolioBuilderReferrer', referrer);
+        }
+
+        // Check if editing existing portfolio
+        this.checkForExistingPortfolio();
+    },
+
+    // Check URL for portfolio ID and load if present
+    async checkForExistingPortfolio() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const portfolioId = urlParams.get('id');
+        const templateParam = urlParams.get('template');
+
+        if (portfolioId) {
+            await this.loadExistingPortfolio(portfolioId);
+        } else if (templateParam) {
+            // Auto-select template from URL parameter
+            this.selectTemplate(templateParam);
+        }
+    },
+
+    // Load existing portfolio by ID
+    async loadExistingPortfolio(portfolioId) {
+        try {
+            const response = await fetch(`/api/portfolio/${portfolioId}`);
+
+            if (!response.ok) {
+                throw new Error('Failed to load portfolio');
+            }
+
+            const portfolio = await response.json();
+
+            // Set up portfolio data with ID for updates
+            this.portfolioData = {
+                id: portfolio.id,
+                name: portfolio.name,
+                template: portfolio.template,
+                components: portfolio.components
+            };
+
+            this.selectedTemplate = portfolio.template;
+
+            // Hide template selector, show builder
+            document.getElementById('templateSelector').style.display = 'none';
+            document.getElementById('portfolioBuilder').style.display = 'flex';
+
+            // Update template label
+            document.getElementById('templateLabel').textContent = `(${portfolio.template} template)`;
+
+            // Hide navbar and adjust layout
+            document.body.classList.add('builder-mode');
+
+            // Auto-collapse sidebar
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar && !sidebar.classList.contains('is-collapsed')) {
+                sidebar.classList.add('is-collapsed');
+                document.body.classList.add('sidebar-collapsed');
+                localStorage.setItem('sidebarCollapsed', 'true');
+            }
+
+            // Initialize builder
+            this.renderComponentPalette();
+            this.renderPortfolio();
+            this.initializeLucideIcons();
+
+        } catch (error) {
+            console.error('Error loading portfolio:', error);
+            alert('Failed to load portfolio. Please try again or create a new one.');
+            window.location.href = 'my-portfolios.html';
+        }
     },
 
     // Setup all event listeners
@@ -476,10 +550,22 @@ const PortfolioBuilder = {
         document.getElementById('backButton')?.addEventListener('click', () => this.goBack());
         document.getElementById('addComponentButton')?.addEventListener('click', () => this.togglePalette());
         document.getElementById('previewToggle')?.addEventListener('click', () => this.togglePreview());
-        document.getElementById('saveButton')?.addEventListener('click', () => this.savePortfolio());
+        document.getElementById('saveButton')?.addEventListener('click', () => this.showSaveModal());
         document.getElementById('closePalette')?.addEventListener('click', () => this.togglePalette());
         document.getElementById('closeEditor')?.addEventListener('click', () => this.closeEditor());
         document.getElementById('deleteComponent')?.addEventListener('click', () => this.deleteSelectedComponent());
+
+        // Save modal controls
+        document.getElementById('closeSaveModal')?.addEventListener('click', () => this.hideSaveModal());
+        document.getElementById('cancelSave')?.addEventListener('click', () => this.hideSaveModal());
+        document.getElementById('confirmSave')?.addEventListener('click', () => this.savePortfolio());
+
+        // Allow Enter key to save in modal
+        document.getElementById('portfolioName')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.savePortfolio();
+            }
+        });
     },
 
     // Initialize Lucide icons
@@ -496,6 +582,8 @@ const PortfolioBuilder = {
     selectTemplate(template) {
         this.selectedTemplate = template;
         this.portfolioData = {
+            id: this.portfolioData?.id, // Preserve ID if editing
+            name: this.portfolioData?.name || '',
             template: template,
             components: this.getDefaultComponents(template)
         };
@@ -529,6 +617,17 @@ const PortfolioBuilder = {
     },
 
     goBack() {
+        // If editing an existing portfolio and came from another page, go back to that page
+        if (this.portfolioData?.id) {
+            const referrer = sessionStorage.getItem('portfolioBuilderReferrer');
+            if (referrer && (referrer.includes('my-portfolios.html') || referrer.includes('dashboard.html'))) {
+                sessionStorage.removeItem('portfolioBuilderReferrer');
+                window.location.href = referrer;
+                return;
+            }
+        }
+
+        // Otherwise, go back to template selection
         this.selectedTemplate = null;
         this.portfolioData = null;
         this.selectedComponentId = null;
@@ -1872,7 +1971,40 @@ const PortfolioBuilder = {
     // SAVE FUNCTIONALITY
     // ============================================================================
 
+    showSaveModal() {
+        const modal = document.getElementById('savePortfolioModal');
+        const nameInput = document.getElementById('portfolioName');
+
+        // Pre-fill with existing name if available
+        nameInput.value = this.portfolioData.name || '';
+
+        modal.style.display = 'flex';
+        nameInput.focus();
+
+        // Initialize Lucide icons in modal
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+    },
+
+    hideSaveModal() {
+        const modal = document.getElementById('savePortfolioModal');
+        modal.style.display = 'none';
+    },
+
     async savePortfolio() {
+        const nameInput = document.getElementById('portfolioName');
+        const portfolioName = nameInput.value.trim();
+
+        if (!portfolioName) {
+            alert('Please enter a portfolio name.');
+            nameInput.focus();
+            return;
+        }
+
+        // Update portfolio data with name
+        this.portfolioData.name = portfolioName;
+
         try {
             const response = await fetch('/api/save-portfolio', {
                 method: 'POST',
@@ -1882,15 +2014,51 @@ const PortfolioBuilder = {
                 body: JSON.stringify(this.portfolioData)
             });
 
+            const result = await response.json();
+
             if (response.ok) {
-                alert('Portfolio saved successfully!');
+                // Update portfolio ID if it was a new creation
+                if (result.id && !this.portfolioData.id) {
+                    this.portfolioData.id = result.id;
+                    // Update URL to include portfolio ID (without page reload)
+                    window.history.replaceState({}, '', `create-portfolio.html?id=${result.id}`);
+                }
+
+                this.hideSaveModal();
+                this.showNotification('Portfolio saved successfully!', 'success');
             } else {
-                alert('Failed to save portfolio. Please try again.');
+                alert(result.error || 'Failed to save portfolio. Please try again.');
             }
         } catch (error) {
             console.error('Error saving portfolio:', error);
             alert('An error occurred while saving. Please try again.');
         }
+    },
+
+    showNotification(message, type = 'success') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}"></i>
+            <span>${message}</span>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Initialize icon
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        // Show notification
+        setTimeout(() => notification.classList.add('show'), 10);
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     },
 
     // ============================================================================

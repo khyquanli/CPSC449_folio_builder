@@ -1120,7 +1120,8 @@ body.builder-mode .component-palette {
   display: flex;
   gap: 16px;
   overflow-x: auto;
-  padding-bottom: 4px;
+  padding: 8px 0;
+  padding-bottom: 8px;
 }
 
 .pf-template-card {
@@ -1137,10 +1138,7 @@ body.builder-mode .component-palette {
   box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
 }
 
-.pf-template-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
-  transform: translateY(-1px);
-}
+/* Hover styles inherited from .template-card in portfolio-builder.css */
 
 .pf-thumb {
   width: 100%;
@@ -1178,7 +1176,7 @@ body.builder-mode .component-palette {
 
 .pf-grid-header {
   display: flex;
-  justify-content: space-between;
+  gap: 16px;
   align-items: center;
   margin-bottom: 12px;
 }
@@ -1265,4 +1263,147 @@ body.builder-mode .component-palette {
 
 .pf-card-new-inner .material-symbols-outlined {
   font-size: 32px;
+}
+
+/* === PORTFOLIO CARD ENHANCEMENTS === */
+.pf-card {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.pf-card:hover {
+  transform: translateY(-2px);
+}
+
+.pf-card:hover .pf-card-actions {
+  opacity: 1;
+}
+
+/* Template-specific thumbnails */
+.pf-card-thumb.template-minimal {
+  background: linear-gradient(135deg, #f9fafb, #ffffff);
+}
+
+.pf-card-thumb.template-modern {
+  background: linear-gradient(135deg, #dbeafe, #e0e7ff, #fce7f3);
+}
+
+.pf-card-thumb.template-creative {
+  background: linear-gradient(135deg, #fef3c7, #fcd34d, #fbbf24);
+}
+
+.pf-card-thumb {
+  position: relative;
+  overflow: hidden;
+}
+
+.pf-card-template-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.pf-card-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-card-sub {
+  font-size: 0.8rem;
+}
+
+.pf-card-actions {
+  display: flex;
+  gap: 4px;
+  padding: 4px 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.pf-card-action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pf-card-action-btn:hover {
+  background: #e5e7eb;
+  transform: scale(1.05);
+}
+
+.pf-card-action-btn .material-symbols-outlined {
+  font-size: 18px;
+  color: #6b7280;
+}
+
+.pf-card-action-btn:hover .material-symbols-outlined {
+  color: #374151;
+}
+
+.pf-card-action-btn[data-action="delete"]:hover {
+  background: #fee2e2;
+  border-color: #fecaca;
+}
+
+.pf-card-action-btn[data-action="delete"]:hover .material-symbols-outlined {
+  color: #dc2626;
+}
+
+.pf-card-new:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+/* Loading and Empty States */
+.pf-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.pf-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  gap: 16px;
+  text-align: center;
+}
+
+.pf-empty-state h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.pf-empty-state p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.pf-error {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: #dc2626;
+  font-size: 1rem;
 }
