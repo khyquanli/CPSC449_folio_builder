@@ -2686,3 +2686,51 @@ body {
     font-weight: 500;
     color: #111827;
 }
+
+/* ================================
+   AI ACTION BUTTONS (editor panel)
+   ================================ */
+.ai-actions {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.ai-actions .ai-rewrite,
+.ai-actions .ai-generate {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.ai-actions .ai-rewrite {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+}
+
+.ai-actions .ai-rewrite:hover {
+    background-color: var(--color-border-light);
+    border-color: var(--color-border);
+}
+
+.ai-actions .btn-ghost {
+    background: var(--color-bg-light);
+    border: 1px dashed var(--color-border);
+    color: var(--color-text-light);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.ai-actions .btn-ghost:hover {
+    background: var(--color-bg);
+    border-color: var(--color-text-light);
+    color: var(--color-text);
+}

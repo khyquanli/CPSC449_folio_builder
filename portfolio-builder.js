@@ -1937,6 +1937,8 @@ const PortfolioBuilder = {
             });
         });
 
+        this.attachAiHelpers(editorContent, component);
+
         this.initializeLucideIcons();
     },
 
@@ -2080,6 +2082,141 @@ const PortfolioBuilder = {
     formatDate(dateString) {
         return DateFormatter.format(dateString);
     },
+    
+    // ========================================================================
+    // AI HELPERS
+    // ========================================================================
+
+    attachAiHelpers(editorContent, component) {
+        const self = this;
+
+        editorContent.querySelectorAll(".editor-field").forEach(fieldEl => {
+            const editor = fieldEl.querySelector(".rich-text-editable");
+            if (!editor) return;
+
+            const fieldName = editor.dataset.field;
+            if (!fieldName) return;
+
+            if (fieldEl.querySelector(".ai-actions")) return;
+
+            const aiContainer = document.createElement("div");
+            aiContainer.className = "ai-actions";
+
+            aiContainer.innerHTML = `
+                <button type="button" class="btn-secondary ai-rewrite">
+                    ✨ Rewrite with AI
+                </button>
+                <button type="button" class="btn-ghost ai-generate">
+                    🤖 Write it for me
+                </button>
+            `;
+
+            fieldEl.appendChild(aiContainer);
+
+            const rewriteBtn = aiContainer.querySelector(".ai-rewrite");
+            const generateBtn = aiContainer.querySelector(".ai-generate");
+
+            rewriteBtn.addEventListener("click", () => {
+                self.handleAiRewrite(component, fieldName, editor, rewriteBtn);
+            });
+
+            generateBtn.addEventListener("click", () => {
+                self.handleAiGenerate(component, fieldName, editor, generateBtn);
+            });
+        });
+    },
+
+    async handleAiRewrite(component, fieldName, editorEl, buttonEl) {
+        const originalText = editorEl.innerText.trim();
+        if (!originalText) {
+            alert("Please type something first for AI to rewrite.");
+            return;
+        }
+
+        const oldLabel = buttonEl.textContent;
+        buttonEl.disabled = true;
+        buttonEl.textContent = "Rewriting...";
+
+        try {
+            const res = await fetch("/api/ai/text-assist", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    text: originalText,
+                    mode: "rewrite",
+                    componentType: component.type,
+                    field: fieldName
+                })
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                console.error(data);
+                alert(data.error || "AI could not rewrite the text.");
+                return;
+            }
+
+            const newText = (data.text || "").trim();
+            const html = newText.replace(/\n/g, "<br>");
+
+            editorEl.innerHTML = html;
+
+            const updatedContent = { ...component.content, [fieldName]: html };
+            this.updateComponent(component.id, updatedContent);
+        } catch (err) {
+            console.error(err);
+            alert("Error contacting AI service.");
+        } finally {
+            buttonEl.disabled = false;
+            buttonEl.textContent = oldLabel;
+        }
+    },
+
+    async handleAiGenerate(component, fieldName, editorEl, buttonEl) {
+        const notes = prompt(
+            "Give the AI a few notes or bullet points about what you want to say:"
+        );
+        if (!notes) return;
+
+        const oldLabel = buttonEl.textContent;
+        buttonEl.disabled = true;
+        buttonEl.textContent = "Generating...";
+
+        try {
+            const res = await fetch("/api/ai/text-assist", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    text: notes,
+                    mode: "generate",
+                    componentType: component.type,
+                    field: fieldName
+                })
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                console.error(data);
+                alert(data.error || "AI could not generate text.");
+                return;
+            }
+
+            const newText = (data.text || "").trim();
+            const html = newText.replace(/\n/g, "<br>");
+
+            editorEl.innerHTML = html;
+
+            const updatedContent = { ...component.content, [fieldName]: html };
+            this.updateComponent(component.id, updatedContent);
+        } catch (err) {
+            console.error(err);
+            alert("Error contacting AI service.");
+        } finally {
+            buttonEl.disabled = false;
+            buttonEl.textContent = oldLabel;
+        }
+    },
+
 };
 
 // Initialize when DOM is loaded
