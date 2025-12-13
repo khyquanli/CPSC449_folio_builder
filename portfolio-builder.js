@@ -2086,6 +2086,72 @@ const PortfolioBuilder = {
     // ========================================================================
     // AI HELPERS
     // ========================================================================
+    openAiNotesModal() {
+    return new Promise((resolve) => {
+        // prevent duplicates
+        const existing = document.querySelector(".ai-modal-overlay");
+        if (existing) existing.remove();
+
+        const overlay = document.createElement("div");
+        overlay.className = "ai-modal-overlay";
+
+        overlay.innerHTML = `
+        <div class="ai-modal">
+            <div class="ai-modal-header">
+            <div class="ai-modal-title">Write it for me</div>
+            <button type="button" class="ai-modal-close" aria-label="Close">×</button>
+            </div>
+
+            <div class="ai-modal-body">
+            <label class="ai-modal-label">Give the AI a few notes or bullet points:</label>
+            <textarea class="ai-modal-textarea" placeholder="- Who you are\n- What you do\n- What you want to highlight"></textarea>
+            </div>
+
+            <div class="ai-modal-footer">
+            <button type="button" class="btn-secondary ai-modal-submit">Cancel</button>
+            <button type="button" class="btn-secondary ai-modal-submit">Generate</button>
+            </div>
+        </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        const textarea = overlay.querySelector(".ai-modal-textarea");
+        const closeBtn = overlay.querySelector(".ai-modal-close");
+        const cancelBtn = overlay.querySelector(".ai-modal-cancel");
+        const submitBtn = overlay.querySelector(".ai-modal-submit");
+
+        const cleanup = (val) => {
+        overlay.remove();
+        resolve(val);
+        };
+
+        // close actions
+        closeBtn.addEventListener("click", () => cleanup(null));
+        cancelBtn.addEventListener("click", () => cleanup(null));
+        overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) cleanup(null);
+        });
+
+        // submit
+        submitBtn.addEventListener("click", () => {
+        const val = textarea.value.trim();
+        cleanup(val.length ? val : null);
+        });
+
+        // keyboard
+        textarea.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") cleanup(null);
+        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+            const val = textarea.value.trim();
+            cleanup(val.length ? val : null);
+        }
+        });
+
+        // focus
+        setTimeout(() => textarea.focus(), 0);
+    });
+    },
 
     attachAiHelpers(editorContent, component) {
         const self = this;
@@ -2124,12 +2190,13 @@ const PortfolioBuilder = {
                 self.handleAiGenerate(component, fieldName, editor, generateBtn);
             });
         });
+        
     },
 
     async handleAiRewrite(component, fieldName, editorEl, buttonEl) {
         const originalText = editorEl.innerText.trim();
         if (!originalText) {
-            alert("Please type something first for AI to rewrite.");
+            this.showAiInlineMessage(editorEl, "Type something first, then click Rewrite.");
             return;
         }
 
@@ -2152,7 +2219,7 @@ const PortfolioBuilder = {
             const data = await res.json();
             if (!res.ok) {
                 console.error(data);
-                alert(data.error || "AI could not rewrite the text.");
+                this.showAiInlineMessage(editorEl, data.error || "AI request failed. Try again.");
                 return;
             }
 
@@ -2173,9 +2240,7 @@ const PortfolioBuilder = {
     },
 
     async handleAiGenerate(component, fieldName, editorEl, buttonEl) {
-        const notes = prompt(
-            "Give the AI a few notes or bullet points about what you want to say:"
-        );
+        const notes = await this.openAiNotesModal();
         if (!notes) return;
 
         const oldLabel = buttonEl.textContent;
@@ -2215,6 +2280,26 @@ const PortfolioBuilder = {
             buttonEl.disabled = false;
             buttonEl.textContent = oldLabel;
         }
+    },
+
+    showAiInlineMessage(editorEl, message) {
+        const fieldEl = editorEl.closest(".editor-field");
+        if (!fieldEl) return;
+
+        let msg = fieldEl.querySelector(".ai-inline-msg");
+        if (!msg) {
+            msg = document.createElement("div");
+            msg.className = "ai-inline-msg";
+            fieldEl.appendChild(msg);
+        }
+
+        msg.textContent = message;
+        msg.classList.add("show");
+
+        clearTimeout(msg._t);
+        msg._t = setTimeout(() => {
+            msg.classList.remove("show");
+        }, 2500);
     },
 
 };
