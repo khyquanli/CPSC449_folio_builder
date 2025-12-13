@@ -2108,7 +2108,7 @@ const PortfolioBuilder = {
             </div>
 
             <div class="ai-modal-footer">
-            <button type="button" class="btn-secondary ai-modal-submit">Cancel</button>
+            <button type="button" class="btn-secondary ai-modal-cancel">Cancel</button>
             <button type="button" class="btn-secondary ai-modal-submit">Generate</button>
             </div>
         </div>
