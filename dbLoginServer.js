@@ -1,9 +1,18 @@
+require("dotenv").config();                    // <--- NEW: load .env
+
 const mysql = require("mysql2");
 const express = require("express");
 const bcrypt = require("bcrypt");
 const path = require("path");
-const session = require("express-session");  // To manage login sessions
-const MySQLStore = require("express-mysql-session")(session); // Stores session
+const session = require("express-session");
+const MySQLStore = require("express-mysql-session")(session);
+
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const geminiModel = genAI.getGenerativeModel({
+  model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
+});
+
 
 const app = express();
 const port = 3000;
@@ -420,6 +429,48 @@ app.delete("/api/delete-portfolio", (req, res) => {
       res.json({ success: true, message: "All portfolios deleted successfully" });
     }
   );
+});
+
+// ===============================
+// AI Text Assist Route
+// ===============================
+app.post("/api/ai/text-assist", async (req, res) => {
+  try {
+    // make sure user is logged in
+    if (!req.session || !req.session.user) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    const { text, mode, componentType, field } = req.body;
+
+    if (!text || text.trim().length === 0) {
+      return res.status(400).json({ error: "Text is required." });
+    }
+
+    const isGenerate = mode === "generate";
+
+    const systemPrompt =
+      "You help users write polished, professional content for their portfolio websites. " +
+      "Write clearly, concisely, and in a friendly professional tone. " +
+      "You rewrite or generate text for sections like About Me, Projects, Experience, etc.";
+
+    const userPrompt = isGenerate
+      ? `Using these notes, generate a polished portfolio section for "${componentType}.${field}":\n\n${text}`
+      : `Rewrite the following portfolio text for "${componentType}.${field}" in a polished, friendly, professional tone. ` +
+        `Keep the meaning but improve clarity and structure:\n\n"${text}"`;
+
+    // Gemini likes a single prompt string, so combine them:
+    const fullPrompt = `${systemPrompt}\n\n${userPrompt}`;
+
+    const result = await geminiModel.generateContent(fullPrompt);
+    const response = result.response;
+    const newText = (response.text() || "Sorry, I couldn't generate text.").trim();
+
+    res.json({ text: newText });
+  } catch (err) {
+    console.error("AI Error (Gemini):", err);
+    res.status(500).json({ error: "AI service error" });
+  }
 });
 
 app.listen(port, () => {
